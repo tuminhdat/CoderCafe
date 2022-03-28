@@ -7,6 +7,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="Brown">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="797*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="CategoryDataGrid" Grid.Column="1" HorizontalAlignment="Left" Height="345" Margin="436,23,0,0" VerticalAlignment="Top" Width="320"/>
+        <Label Name="CategoryName" Content="Category Name" Grid.Column="1" HorizontalAlignment="Left" Margin="64,42,0,0" VerticalAlignment="Top"  Width="120" Background="Wheat" FontSize="15"/>
+        <Label x:Name="Description" Content="Description" Grid.Column="1" HorizontalAlignment="Left" Margin="64,90,0,0" VerticalAlignment="Top" Width="120" Background="Wheat" FontSize="15" RenderTransformOrigin="0.468,-0.281"/>
+        <Label x:Name="ImageName" Content="Image Name" Grid.Column="1" HorizontalAlignment="Left" Margin="64,143,0,0" VerticalAlignment="Top" Width="120" Background="Wheat" FontSize="15"/>
+        <TextBox x:Name="CategoryTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="197,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="15"/>
+        <TextBox x:Name="DescriptionTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="197,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="15"/>
+        <Button Name="SaveCategoryButton" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Margin="263,323,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15"/>
+        <Image x:Name="CategoryImage" Grid.Column="1" HorizontalAlignment="Left" Height="127" Margin="64,268,0,0" VerticalAlignment="Top" Width="149"/>
+        <ListView Name="ImageListView" Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="195,143,0,0" VerticalAlignment="Top" Width="202">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
     </Grid>
 </UserControl>
