@@ -5,8 +5,62 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FPCoderCafe.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="Red">
+             d:DesignHeight="500" d:DesignWidth="800" Background="Red">
     <Grid>
-            
+
+        <ListBox x:Name="CategoryListBox" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="370" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" Width="50">
+                        <TextBlock Text="{Binding Id}" Visibility="Collapsed"></TextBlock>
+                        <Image  Source="{Binding ImageName}" Height="25" Width="25"></Image>
+                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" IsItemsHost="True" Width="370"></WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+        <Grid x:Name="SecondGrid" HorizontalAlignment="Left" Height="430" Margin="10,10,0,0" VerticalAlignment="Top" Width="370">
+            <ListBox x:Name="ProductListBox" HorizontalAlignment="Left" Height="399" VerticalAlignment="Top" Width="370">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical" Width="50">
+                            <TextBlock Text="{Binding Id}" Visibility="Collapsed"></TextBlock>
+                            <Image  Source="{Binding FullImagePath}" Height="25" Width="25"></Image>
+                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" IsItemsHost="True" Width="370"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <Button x:Name="SecondGridBack" Content="Back" HorizontalAlignment="Left" Margin="0,404,0,0" VerticalAlignment="Top" Width="75"/>
+        </Grid>
+        
+        <Grid x:Name="ThirdGrid" HorizontalAlignment="Left" Height="430" Margin="10,10,0,0" VerticalAlignment="Top" Width="370">
+            <Image x:Name="ItemImage" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.33,0.48"/>
+            <RadioButton x:Name="SmallSize" Content="Small" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" GroupName="ProductSize" IsChecked="True"/>
+            <RadioButton x:Name="MediumSize" Content="Medium" HorizontalAlignment="Left" Margin="63,115,0,0" VerticalAlignment="Top" GroupName="ProductSize"/>
+            <RadioButton x:Name="LargeSize" Content="Large" HorizontalAlignment="Left" Margin="131,115,0,0" VerticalAlignment="Top" GroupName="ProductSize"/>
+            <Label Content="Quantity:" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="QuantityTextBox" HorizontalAlignment="Left" Height="23" Margin="71,140,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+            <Label Content="Note:" HorizontalAlignment="Left" Margin="10,166,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="NoteTextBox" HorizontalAlignment="Left" Height="107" Margin="71,170,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="280"/>
+            <Label Content="Price per one:" HorizontalAlignment="Left" Margin="10,280,0,0" VerticalAlignment="Top"/>
+            <TextBlock x:Name="PriceTextBlock" HorizontalAlignment="Left" Margin="95,285,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+            <Button x:Name="ThirdGridBack" Content="Back" HorizontalAlignment="Left" Margin="0,400,0,0" VerticalAlignment="Top" Width="75"/>
+            <Button x:Name="AddItemButton" Content="Add" HorizontalAlignment="Left" Margin="295,400,0,0" VerticalAlignment="Top" Width="75"/>
+            <TextBlock x:Name="PlaceProductId" HorizontalAlignment="Left" Margin="311,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="0.629,1.441" Visibility="Collapsed"/>
+        </Grid>
+        
+
     </Grid>
 </UserControl>
