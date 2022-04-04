@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FPCoderCafe.Utilities;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +15,10 @@ namespace FPCoderCafe
     /// </summary>
     public partial class App : Application
     {
+        public App() 
+        {
+            var context = new PointOfSaleContext();            
+            context.Database.Migrate();
+        }
     }
 }
