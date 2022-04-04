@@ -1,8 +1,10 @@
 ﻿using FPCoderCafe.Entities;
 using FPCoderCafe.Utilities;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,13 +26,39 @@ namespace FPCoderCafe.UserControls
     public partial class CategoryUserControl : UserControl
     {
         List<Category> categoryList = new List<Category>();
+        string fileName = "";
         public CategoryUserControl()
         {
             InitializeComponent();
             populateCategoryDataGrid();
             SaveCategoryButton.Click += saveCategoryOnClick;
-            ImageListBox.SelectionChanged += populateCategoryImage;
+            SelectImageButton.Click += selectFile;
+           // ImageListBox.SelectionChanged += populateCategoryImage;
         }
+
+        private void selectFile(object o, EventArgs e)
+        {
+            OpenFileDialog openFileDialogue = new OpenFileDialog();
+            openFileDialogue.InitialDirectory = "c:\\temp";
+            openFileDialogue.Filter = "PNG Files (*.png)|*.png";
+            openFileDialogue.RestoreDirectory = true;
+
+            Nullable<bool> result = openFileDialogue.ShowDialog();
+
+            if (result == true)
+            {
+                //As soon as there is a result from showdialogue assign it to the the fileName 
+                fileName = openFileDialogue.FileName;
+                ImagePathTextBox.Text = fileName;
+                CategoryImage.Source = new BitmapImage(new Uri(fileName));
+                if (File.Exists(fileName))
+                {
+                    File.Copy(fileName, Directory.GetCurrentDirectory() + "/Images");
+                }
+            }
+            
+        }
+
         public void setUpCategoryGrid()
         {
             CategoryDataGrid.SelectionMode = DataGridSelectionMode.Single;
@@ -49,7 +77,7 @@ namespace FPCoderCafe.UserControls
             Category newCategory = new Category();
             newCategory.Name = CategoryTextBox.Text;
             newCategory.Description = CategoryDescripTextBox.Text;
-            newCategory.ImageName = CategoryImage.Source.ToString();
+            newCategory.ImageName = ImagePathTextBox.Text;
             using (var ctx = new PointOfSaleContext())
             {
                 //add new category enter from the text box to database
@@ -62,10 +90,10 @@ namespace FPCoderCafe.UserControls
         }
         public void populateCategoryImage(Object s, EventArgs e)
         {
-            ImageListBox.SelectionMode = SelectionMode.Single;
-            ListBoxItem selected = ImageListBox.SelectedItem as ListBoxItem;
+           // ImageListBox.SelectionMode = SelectionMode.Single;
+           // ListBoxItem selected = ImageListBox.SelectedItem as ListBoxItem;
             //add image source to category image when appropriate item is selected from list box
-            switch (selected.Content.ToString())
+         /*   switch (selected.Content.ToString())
             {
                 case "Cafe":
                     CategoryImage.Source = new BitmapImage(new Uri("/FPCoderCafe;component/Images/cafe_category.png", UriKind.Relative)); ;
@@ -79,7 +107,7 @@ namespace FPCoderCafe.UserControls
                 case "Tea":
                     CategoryImage.Source = new BitmapImage(new Uri("/FPCoderCafe;component/Images/tea_category.png", UriKind.Relative)); ;
                     break;
-            }
+            }*/
         }
         public void clearTextBox()
         {
