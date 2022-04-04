@@ -5,8 +5,52 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FPCoderCafe.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="Beige">
+             d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel VerticalAlignment="Center">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Content="Name" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5"/>
+                <Label Grid.Row="1" Content="Small Price" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5"/>
+                <Label Grid.Row="2" Content="Medium Price" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5"/>
+                <Label Grid.Row="3" Content="Large Price" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5"/>
+                <Label Grid.Row="4" Content="Category" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5"/>
+                <Label Grid.Row="5" Content="Description" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5"/>
+                <Button Grid.Row="7" Content=" Select Image" VerticalContentAlignment="Center" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Name="NameTextBox"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="SmallPriceTextBox"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Name="MediumPriceTextBox"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Name="LargePriceTextBox"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" Margin="5" Name="CategoryComboBox"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Margin="5" Name="DescriptionTextBox" Grid.RowSpan="2"/>
+                <TextBox Grid.Row="7" Grid.Column="1" Margin="5" Name="ImagePathTextBox" IsReadOnly="True"/>
+                <Image Grid.Row="8" Grid.Column="2" Width="100" Name="FoodImage"/>
+                <Grid/>
+            </Grid>
+            <StackPanel Height="50" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Width="80" Height="30" Content="Add" Margin="5" Name="AddButton"/>
+                <Button Width="80" Height="30" Content="Update" Margin="5" Name="UpdateButton"/>
+                <Button Width="80" Height="30" Content="Delete" Margin="5" Name="DeleteButton"/>
+            </StackPanel>
+        </StackPanel>
+        <DataGrid Grid.Column="1" Name="FoodDataGrid" IsReadOnly="True"/>
     </Grid>
 </UserControl>

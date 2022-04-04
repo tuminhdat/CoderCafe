@@ -23,6 +23,18 @@ namespace FPCoderCafe.UserControls
         public FoodUserControl()
         {
             InitializeComponent();
+
         }
+
+        void ToggleEventhandlers(bool toggle)
+        {
+        }
+
+        void AddEventHandler(object o, EventArgs args)
+        { 
+        
+        }
+
+
     }
 }
