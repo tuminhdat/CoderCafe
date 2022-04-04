@@ -18,7 +18,7 @@ namespace FPCoderCafe.Entities
         public Category Category { get; set; }
         public string ImageName { get; set; }
         [NotMapped]
-        public string FullImagePath { get => "./image/" + ImageName; }
+        public string FullImagePath { get => "./Images/" + ImageName; }
         public Product()
         {
 
