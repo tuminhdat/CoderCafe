@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FPCoderCafe.Entities;
+using FPCoderCafe.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +25,19 @@ namespace FPCoderCafe.UserControls
         public FoodUserControl()
         {
             InitializeComponent();
+            SetupCategory();
+        }
 
+        private void SetupCategory()
+        {
+            using (var context = new PointOfSaleContext())
+            {
+                var categories = context.Categories.ToList();
+                foreach (var category in categories)
+                {
+                    CategoryComboBox.Items.Add(category);
+                }
+            }
         }
 
         void ToggleEventhandlers(bool toggle)
@@ -31,8 +45,7 @@ namespace FPCoderCafe.UserControls
         }
 
         void AddEventHandler(object o, EventArgs args)
-        { 
-        
+        {
         }
 
 
