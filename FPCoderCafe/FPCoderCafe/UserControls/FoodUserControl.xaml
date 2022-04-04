@@ -39,14 +39,14 @@
                 <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="SmallPriceTextBox"/>
                 <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Name="MediumPriceTextBox"/>
                 <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Name="LargePriceTextBox"/>
-                <ComboBox Grid.Row="4" Grid.Column="1" Margin="5" Name="CategoryComboBox"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" Margin="5" Name="CategoryComboBox" DisplayMemberPath="Name" SelectedValuePath="Id"/>
                 <TextBox Grid.Row="5" Grid.Column="1" Margin="5" Name="DescriptionTextBox" Grid.RowSpan="2"/>
                 <TextBox Grid.Row="7" Grid.Column="1" Margin="5" Name="ImagePathTextBox" IsReadOnly="True"/>
                 <Image Grid.Row="8" Grid.Column="2" Width="100" Name="FoodImage"/>
                 <Grid/>
             </Grid>
             <StackPanel Height="50" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Width="80" Height="30" Content="Add" Margin="5" Name="AddButton"/>
+                <Button Width="80" Height="30" Content="Save" Margin="5" Name="SaveButton"/>
                 <Button Width="80" Height="30" Content="Update" Margin="5" Name="UpdateButton"/>
                 <Button Width="80" Height="30" Content="Delete" Margin="5" Name="DeleteButton"/>
             </StackPanel>
