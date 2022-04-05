@@ -29,19 +29,20 @@ namespace FPCoderCafe.UserControls
 
             InitializeComponent();
 
-            Toggle(false);
+            toggleEventHandlers(false);
 
             SecondGrid.Visibility = Visibility.Collapsed;
             ThirdGrid.Visibility = Visibility.Collapsed;
 
             InitializeCategoryListBox();
+            initializeDataGrid();
 
-            Toggle(true);
+            toggleEventHandlers(true);
         }
 
-        private void Toggle(Boolean value)
+        private void toggleEventHandlers(bool toggle)
         {
-            if (value)
+            if (toggle)
             {
                 SecondGridBack.Click += BackButtonOfSecondGrid;
                 ThirdGridBack.Click += BackButtonOfThirdGrid;
@@ -50,49 +51,48 @@ namespace FPCoderCafe.UserControls
                 SmallSize.Checked += SizeChange;
                 MediumSize.Checked += SizeChange;
                 LargeSize.Checked += SizeChange;
-            } else
+                AddItemButton.Click += AddItemButtonClick;
+            }
+            else
             {
                 SecondGridBack.Click -= BackButtonOfSecondGrid;
-                ThirdGridBack.Click -= BackButtonOfThirdGrid; 
+                ThirdGridBack.Click -= BackButtonOfThirdGrid;
                 CategoryListBox.SelectionChanged -= CategorySelected;
                 ProductListBox.SelectionChanged -= ProductSelected;
                 SmallSize.Checked -= SizeChange;
                 MediumSize.Checked -= SizeChange;
                 LargeSize.Checked -= SizeChange;
+                AddItemButton.Click -= AddItemButtonClick;
             }
         }
 
         private void BackButtonOfSecondGrid(object o, EventArgs e)
         {
+            CategoryListBox.UnselectAll();
+
             SecondGrid.Visibility = Visibility.Collapsed;
 
             CategoryListBox.Visibility = Visibility.Visible;
-
-            CategoryListBox.UnselectAll();
         }
 
         private void BackButtonOfThirdGrid(object o, EventArgs e)
         {
-            MessageBox.Show("Back was clicked!");
-
             ProductListBox.UnselectAll();
 
             ThirdGrid.Visibility = Visibility.Collapsed;
 
             SecondGrid.Visibility = Visibility.Visible;
-
-            
         }
 
         private void CategorySelected(object o, EventArgs e)
         {
-            Category getSelectedItem = (Category) CategoryListBox.SelectedItem;
+            Category getSelectedItem = (Category)CategoryListBox.SelectedItem;
 
             if (getSelectedItem != null)
             {
                 using (var ctx = new PointOfSaleContext())
                 {
-                    var getProductList = ctx.Products.Where(x => x.Id == getSelectedItem.Id).ToList();
+                    var getProductList = ctx.Products.Where(x => x.Category.Id == getSelectedItem.Id).ToList();
 
                     ProductListBox.ItemsSource = getProductList;
                 }
@@ -124,6 +124,7 @@ namespace FPCoderCafe.UserControls
                     var getProductItem = ctx.Products.Where(x => x.Id == getSelectedItem.Id).First();
 
                     PlaceProductId.Text = getProductItem.Id.ToString();
+                    ProductNameText.Content = getProductItem.Name;
                     ItemImage.Source = new BitmapImage(new Uri(getProductItem.FullImagePath, UriKind.Relative));
                     PriceTextBlock.Text = getProductItem.SmallPrice.ToString();
                 }
@@ -145,13 +146,98 @@ namespace FPCoderCafe.UserControls
                 if (SmallSize.IsChecked == true)
                 {
                     PriceTextBlock.Text = getProductItem.SmallPrice.ToString();
-                } else if (MediumSize.IsChecked == true)
+                }
+                else if (MediumSize.IsChecked == true)
                 {
                     PriceTextBlock.Text = getProductItem.MediumPrice.ToString();
-                } else if (LargeSize.IsChecked == true)
+                }
+                else if (LargeSize.IsChecked == true)
                 {
                     PriceTextBlock.Text = getProductItem.LargePrice.ToString();
                 }
+            }
+        }
+
+        private void initializeDataGrid()
+        {
+            DataGridTextColumn ProductIDColumn = new DataGridTextColumn();
+            ProductIDColumn.Header = "ProductId";
+            ProductIDColumn.Binding = new Binding("ProductId");
+            ProductIDColumn.Visibility = Visibility.Collapsed;
+
+            DataGridTextColumn ProductNameColumn = new DataGridTextColumn();
+            ProductNameColumn.Header = "Item Name";
+            ProductNameColumn.Binding = new Binding("ProductName");
+
+            DataGridTextColumn QuantityColumn = new DataGridTextColumn();
+            QuantityColumn.Header = "Quantity";
+            QuantityColumn.Binding = new Binding("Quantity");
+
+            DataGridTextColumn PriceColumn = new DataGridTextColumn();
+            PriceColumn.Header = "Total";
+            PriceColumn.Binding = new Binding("TotalPrice");
+
+            DataGridTextColumn SizeColumn = new DataGridTextColumn();
+            SizeColumn.Header = "Size";
+            SizeColumn.Binding = new Binding("Size");
+
+            DataGridTextColumn NoteColumn = new DataGridTextColumn();
+            NoteColumn.Header = "Note";
+            NoteColumn.Binding = new Binding("Note");
+
+            ItemDataGrid.Columns.Add(ProductIDColumn);
+            ItemDataGrid.Columns.Add(ProductNameColumn);
+            ItemDataGrid.Columns.Add(QuantityColumn);
+            ItemDataGrid.Columns.Add(PriceColumn);
+            ItemDataGrid.Columns.Add(SizeColumn);
+            ItemDataGrid.Columns.Add(NoteColumn);
+        }
+
+        private void AddItemButtonClick(object o, EventArgs e)
+        {
+            TempItem newItem = new TempItem();
+
+            newItem.ProductId = int.Parse(PlaceProductId.Text);
+            newItem.ProductName = ProductNameText.Content.ToString();
+            newItem.Quantity = int.Parse(QuantityTextBox.Text);
+            if (SmallSize.IsChecked == true)
+            {
+                newItem.Size = Item.Size.Small.ToString();
+            }
+            else if (MediumSize.IsChecked == true)
+            {
+                newItem.Size = Item.Size.Medium.ToString();
+            }
+            else if (LargeSize.IsChecked == true)
+            {
+                newItem.Size = Item.Size.Large.ToString();
+            }
+            newItem.Note = NoteTextBox.Text;
+            newItem.TotalPrice = Math.Round(double.Parse(PriceTextBlock.Text) * newItem.Quantity, 2);
+
+            ItemDataGrid.Items.Add(newItem);
+
+            ProductListBox.UnselectAll();
+            CategoryListBox.UnselectAll();
+
+            ThirdGrid.Visibility = Visibility.Collapsed;
+            SecondGrid.Visibility = Visibility.Collapsed;
+            CategoryListBox.Visibility = Visibility.Visible;
+
+
+        }
+
+        public class TempItem
+        {
+            public int ProductId { get; set; }
+            public string ProductName { get; set; }
+            public int Quantity { get; set; }
+            public string Size { get; set; }
+            public string Note { get; set; }
+            public double TotalPrice { get; set; }
+            public TempItem()
+            {
+
             }
         }
     }
