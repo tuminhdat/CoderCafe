@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,8 @@ namespace FPCoderCafe.Entities
         public List<Product> Products { get; set; }
         public string ImageName { get; set; }
         [NotMapped]
-        public string FullImagePath { get => "/Images/" + ImageName; }
+        //public string FullImagePath { get => @"\Images\" + ImageName; }
+        public string FullImagePath { get => Directory.GetCurrentDirectory() + @"\Images\" + ImageName; }
         public Category()
         {
 

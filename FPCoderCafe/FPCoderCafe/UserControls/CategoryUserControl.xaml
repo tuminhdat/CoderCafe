@@ -11,7 +11,7 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="797*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="CategoryDataGrid" Grid.Column="1" HorizontalAlignment="Left" Height="345" Margin="436,23,0,0" VerticalAlignment="Top" Width="320"/>
+        <DataGrid x:Name="CategoryDataGrid" Grid.Column="1" HorizontalAlignment="Left" Height="345" Margin="436,23,0,0" VerticalAlignment="Top" Width="272"/>
         <Label Name="CategoryName" Content="Category Name" Grid.Column="1" HorizontalAlignment="Left" Margin="64,42,0,0" VerticalAlignment="Top"  Width="120" Background="Wheat" FontSize="15"/>
         <Label x:Name="Description" Content="Description" Grid.Column="1" HorizontalAlignment="Left" Margin="64,90,0,0" VerticalAlignment="Top" Width="120" Background="Wheat" FontSize="15" RenderTransformOrigin="0.468,-0.281"/>
         <Button x:Name="SelectImageButton" Content="Select Image" Grid.Column="1" HorizontalAlignment="Left" Margin="64,143,0,0" VerticalAlignment="Top" Width="120" Background="Wheat" FontSize="15"/>
@@ -19,7 +19,7 @@
         <TextBox x:Name="CategoryDescripTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="197,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="15"/>
         <Button Name="SaveCategoryButton" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Margin="263,323,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15"/>
         <Image x:Name="CategoryImage" Grid.Column="1" HorizontalAlignment="Left" Height="127" Margin="35,241,0,0" VerticalAlignment="Top" Width="149" />
-        <Button x:Name="DeleteCateoryButton" Content="Delete" Grid.Column="1" HorizontalAlignment="Left" Margin="263,275,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15"/>
+        <Button x:Name="DeleteCategoryButton" Content="Delete" Grid.Column="1" HorizontalAlignment="Left" Margin="263,275,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15"/>
         <Button x:Name="UpdateCategoryButton" Content="Update" Grid.Column="1" HorizontalAlignment="Left" Margin="263,223,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15"/>
         <TextBox x:Name="ImagePathTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="197,137,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="15" IsReadOnly="True"/>
 

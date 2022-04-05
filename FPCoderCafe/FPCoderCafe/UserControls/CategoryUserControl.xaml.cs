@@ -6,17 +6,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FPCoderCafe.UserControls
 {
@@ -30,10 +23,34 @@ namespace FPCoderCafe.UserControls
         public CategoryUserControl()
         {
             InitializeComponent();
+            ToggleEventsHandle(false);
+            initializeDataGrid();
+            setUpCategoryGrid();
             populateCategoryDataGrid();
-            SaveCategoryButton.Click += saveCategoryOnClick;
-            SelectImageButton.Click += selectFile;
-           // ImageListBox.SelectionChanged += populateCategoryImage;
+            //Make an event handlers
+            ToggleEventsHandle(true);
+
+        }
+
+
+        private void ToggleEventsHandle(bool toggle)
+        {
+            if (toggle)
+            {
+                SaveCategoryButton.Click += saveCategoryOnClick;
+                UpdateCategoryButton.Click += UpdateCategoryOnClick;
+                DeleteCategoryButton.Click += DeleteCategoryOnClick;
+                SelectImageButton.Click += selectFile;
+                CategoryDataGrid.SelectionChanged += displayCategoryToUpdate;
+            }
+            else
+            {
+                SaveCategoryButton.Click -= saveCategoryOnClick;
+                UpdateCategoryButton.Click -= UpdateCategoryOnClick;
+                DeleteCategoryButton.Click -= DeleteCategoryOnClick;
+                SelectImageButton.Click -= selectFile;
+                CategoryDataGrid.SelectionChanged -= displayCategoryToUpdate;
+            }
         }
 
         private void selectFile(object o, EventArgs e)
@@ -49,71 +66,153 @@ namespace FPCoderCafe.UserControls
             {
                 //As soon as there is a result from showdialogue assign it to the the fileName 
                 fileName = openFileDialogue.FileName;
-                ImagePathTextBox.Text = fileName;
+                //Set the name of chosen image file
+                ImagePathTextBox.Text = System.IO.Path.GetFileName(fileName);
+                //Display selected image
                 CategoryImage.Source = new BitmapImage(new Uri(fileName));
-                if (File.Exists(fileName))
+                //Get the desired destination path to save image there
+                string destination = Directory.GetCurrentDirectory() + @"\Images\" + System.IO.Path.GetFileName(fileName);
+               
+                if (!File.Exists(destination))
                 {
-                    File.Copy(fileName, Directory.GetCurrentDirectory() + "/Images");
+                    //Copy the image file to that destination
+                    File.Copy(fileName, destination);
+                    //File.Copy(fileName, "/Images/" + System.IO.Path.GetFileName(fileName));
+
                 }
             }
             
         }
 
-        public void setUpCategoryGrid()
+        private void setUpCategoryGrid()
         {
             CategoryDataGrid.SelectionMode = DataGridSelectionMode.Single;
             CategoryDataGrid.IsReadOnly = true;
         }
-        public void populateCategoryDataGrid()
+
+        private void initializeDataGrid()
         {
+            //Create columns for the datagrid
+            DataGridTextColumn CategoryNameNoColumn = new DataGridTextColumn();
+            CategoryNameNoColumn.Header = "Category Name";
+            CategoryNameNoColumn.Binding = new Binding("Name");
+
+            DataGridTextColumn DescriptionColumn = new DataGridTextColumn();
+            DescriptionColumn.Header = "Description";
+            DescriptionColumn.Binding = new Binding("Description");
+
+            DataGridTextColumn ImageNamecolumn = new DataGridTextColumn();
+            ImageNamecolumn.Header = "Image Name";
+            ImageNamecolumn.Binding = new Binding("ImageName");
+
+            CategoryDataGrid.Columns.Add(CategoryNameNoColumn);
+            CategoryDataGrid.Columns.Add(DescriptionColumn);
+            CategoryDataGrid.Columns.Add(ImageNamecolumn);
+
+        }
+        private void populateCategoryDataGrid()
+        {
+            CategoryDataGrid.Items.Clear();
             using(var ctx = new PointOfSaleContext())
             {
+                //Add data from database to Category datagrid
                 categoryList = ctx.Categories.ToList();
-                CategoryDataGrid.ItemsSource = categoryList;
+                Category category = new Category();
+                foreach(Category c in categoryList)
+                {
+                    CategoryDataGrid.Items.Add(c);
+                }
             }
         }
         private void saveCategoryOnClick(Object s, EventArgs e)
         {
-            Category newCategory = new Category();
-            newCategory.Name = CategoryTextBox.Text;
-            newCategory.Description = CategoryDescripTextBox.Text;
-            newCategory.ImageName = ImagePathTextBox.Text;
-            using (var ctx = new PointOfSaleContext())
+
+            if (CategoryTextBox.Text == "" || ImagePathTextBox.Text == "")
             {
-                //add new category enter from the text box to database
-                ctx.Categories.Add(newCategory);
-                ctx.SaveChanges();
+                MessageBox.Show("Please enter category name and select category image");
             }
-            populateCategoryDataGrid();
-            clearTextBox();
+            else
+            {
+                Category newCategory = new Category();
+                newCategory.Name = CategoryTextBox.Text;
+                newCategory.Description = CategoryDescripTextBox.Text;
+                newCategory.ImageName = ImagePathTextBox.Text;
+                using (var ctx = new PointOfSaleContext())
+                {
+
+                    //add new category enter from the text box to database
+                    ctx.Categories.Add(newCategory);
+                    ctx.SaveChanges();
+                }
+                populateCategoryDataGrid();
+                clearTextBox();
+            }
 
         }
-        public void populateCategoryImage(Object s, EventArgs e)
+        private void displayCategoryToUpdate(Object s, EventArgs e)
         {
-           // ImageListBox.SelectionMode = SelectionMode.Single;
-           // ListBoxItem selected = ImageListBox.SelectedItem as ListBoxItem;
-            //add image source to category image when appropriate item is selected from list box
-         /*   switch (selected.Content.ToString())
+            if(CategoryDataGrid.SelectedItem != null)
             {
-                case "Cafe":
-                    CategoryImage.Source = new BitmapImage(new Uri("/FPCoderCafe;component/Images/cafe_category.png", UriKind.Relative)); ;
-                    break;
-                case "Pop":
-                    CategoryImage.Source = new BitmapImage(new Uri("/FPCoderCafe;component/Images/pop_category.png", UriKind.Relative)); ;
-                    break;
-                case "Smoothie":
-                    CategoryImage.Source = new BitmapImage(new Uri("/FPCoderCafe;component/Images/smoothie_category.png", UriKind.Relative)); ;
-                    break;
-                case "Tea":
-                    CategoryImage.Source = new BitmapImage(new Uri("/FPCoderCafe;component/Images/tea_category.png", UriKind.Relative)); ;
-                    break;
-            }*/
+                //Get the selected category
+                Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
+
+                //populate the form elements
+                CategoryTextBox.Text = selectedCategory.Name;
+                CategoryDescripTextBox.Text = selectedCategory.Description;
+                ImagePathTextBox.Text = selectedCategory.ImageName;
+                string des = Directory.GetCurrentDirectory() + @"\Images\" + selectedCategory.ImageName;
+                CategoryImage.Source = new BitmapImage(new Uri(des));     
+                UpdateCategoryButton.IsEnabled = true;
+            }
+            else
+            {
+                UpdateCategoryButton.IsEnabled = false;
+            }
         }
-        public void clearTextBox()
+
+        private void UpdateCategoryOnClick(Object s, EventArgs e)
         {
-            //clear the text box 
+            using(var ctx = new PointOfSaleContext())
+            {
+                Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
+                int idToUpdate = selectedCategory.Id;
+                //Pull the repestive phone for the id we have
+                Category uc = (Category)ctx.Categories.Where(x => x.Id == idToUpdate).First();
+                //Reconstruct the object based on the form data
+                uc.Name = CategoryTextBox.Text;
+                uc.Description = CategoryDescripTextBox.Text;
+                uc.ImageName = ImagePathTextBox.Text;
+                //Update the object
+                ctx.Categories.Update(uc);
+                //Save changes
+                ctx.SaveChanges();
+                //Update datagrid
+                populateCategoryDataGrid();
+            }
+            //Clear the textbox after clicking update button
+            clearTextBox();
+        }
+        private void DeleteCategoryOnClick(Object s, EventArgs e)
+        {
+            using(var ctx = new PointOfSaleContext())
+            {
+                Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
+                int idToUpdate = selectedCategory.Id;
+                //Pull the repestive phone for the id we have
+                Category uc = (Category)ctx.Categories.Where(x => x.Id == idToUpdate).First();
+                ctx.Categories.Remove(uc);
+                ctx.SaveChanges();
+                populateCategoryDataGrid();
+            }
+            clearTextBox();
+        }
+        private void clearTextBox()
+        {
+            //clear the text box anf image view
             CategoryTextBox.Text = "";
             CategoryDescripTextBox.Text = "";
+            ImagePathTextBox.Text = "";
+            CategoryImage.Source = null;
         }
     }
 }
