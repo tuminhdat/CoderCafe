@@ -15,7 +15,6 @@ namespace FPCoderCafe.Entities
         public string Description { get; set; }
         public List<Product> Products { get; set; }
         public string ImageName { get; set; }
-
         public bool IsEnable{get; set;}
         [NotMapped]
         //public string FullImagePath { get => @"\Images\" + ImageName; }
