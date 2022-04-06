@@ -61,8 +61,34 @@
             <TextBlock x:Name="PlaceProductId" HorizontalAlignment="Left" Margin="311,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="0.629,1.441" Visibility="Collapsed"/>
             <Label x:Name="ProductNameText" Content="" HorizontalAlignment="Left" Margin="138,47,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.115" FontSize="24"/>
         </Grid>
-        <DataGrid x:Name="ItemDataGrid" HorizontalAlignment="Left" Height="410" Margin="495,10,0,0" VerticalAlignment="Top" Width="480"/>
-
+        <DataGrid x:Name="ItemDataGrid" HorizontalAlignment="Left" Height="410" Margin="497,10,0,0" VerticalAlignment="Top" Width="480" IsReadOnly="True"/>
+        <Button x:Name="MakePayButton" Content="Finish And Pay" HorizontalAlignment="Left" Margin="870,425,0,0" VerticalAlignment="Top" Width="107" RenderTransformOrigin="0.653,-0.35"/>
+        <Button x:Name="DeleteButton" Content="Delete Item" HorizontalAlignment="Left" Margin="782,425,0,0" VerticalAlignment="Top" Width="83"/>
+        <Grid x:Name="SignUpGrid" HorizontalAlignment="Left" Height="182" Margin="261,112,0,0" VerticalAlignment="Top" Width="458" Background="White">
+            <Label Content="Sign up" HorizontalAlignment="Left" Margin="176,10,0,0" VerticalAlignment="Top" Height="59" Width="190" FontSize="24"/>
+            <Label Content="Phone Number" HorizontalAlignment="Left" Margin="113,74,0,0" VerticalAlignment="Top"/>
+            <Label Content="Pin" HorizontalAlignment="Left" Margin="113,105,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Height="23" Margin="208,105,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+            <TextBox HorizontalAlignment="Left" Height="23" Margin="208,75,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Submit" HorizontalAlignment="Left" Margin="253,133,0,0" VerticalAlignment="Top" Width="75"/>
+            <Button Content="Back" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+        </Grid>
+        <Grid x:Name="SignInGrid" HorizontalAlignment="Left" Height="182" Margin="261,112,0,0" VerticalAlignment="Top" Width="458" Background="White">
+            <Label Content="Sign In" HorizontalAlignment="Left" Margin="176,10,0,0" VerticalAlignment="Top" Height="59" Width="190" FontSize="24"/>
+            <Label Content="Phone Number" HorizontalAlignment="Left" Margin="113,74,0,0" VerticalAlignment="Top"/>
+            <Label Content="Pin" HorizontalAlignment="Left" Margin="113,105,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Height="23" Margin="208,105,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+            <TextBox HorizontalAlignment="Left" Height="23" Margin="208,75,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Submit" HorizontalAlignment="Left" Margin="253,133,0,0" VerticalAlignment="Top" Width="75"/>
+            <Button Content="Back" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+        </Grid>
+        <Grid x:Name="PaymentGrid" HorizontalAlignment="Left" Height="254" Margin="32,499,0,0" VerticalAlignment="Top" Width="458" Background="White">
+            <Label Content="Payment" HorizontalAlignment="Left" Margin="171,10,0,0" VerticalAlignment="Top" Height="47" Width="164" FontSize="24"/>
+            <Button Content="SignIn/SignUp" HorizontalAlignment="Left" Margin="355,10,0,0" VerticalAlignment="Top" Width="93"/>
+            <Label Content="" HorizontalAlignment="Left" Margin="355,10,0,0" VerticalAlignment="Top"/>
+            <Label Content="" HorizontalAlignment="Left" Margin="355,30,0,0" VerticalAlignment="Top"/>
+            
+        </Grid>
 
     </Grid>
 </UserControl>
