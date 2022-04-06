@@ -12,6 +12,7 @@ namespace FPCoderCafe.Entities
         public string Phone { get; set; }
         public string RedeemPoint { get; set; }
         public string BarCode { get; set; }
+        public bool IsEnable { get; set; }
         public Customer()
         {
 
