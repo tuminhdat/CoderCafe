@@ -17,11 +17,12 @@ namespace FPCoderCafe.Entities
         public string Description { get; set; }
         public Category Category { get; set; }
         public string ImageName { get; set; }
+        public bool IsEnabled { get; set; }
         [NotMapped]
         public string FullImagePath { get => "/Images/" + ImageName; }
         public Product()
         {
-
+            IsEnabled = true;
         }
     }
 }
