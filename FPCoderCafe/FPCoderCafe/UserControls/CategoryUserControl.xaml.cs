@@ -20,13 +20,15 @@ namespace FPCoderCafe.UserControls
     {
         List<Category> categoryList = new List<Category>();
         string fileName = "";
+        StreamWriter sw;
+
         public CategoryUserControl()
         {
             InitializeComponent();
             ToggleEventsHandle(false);
-            initializeDataGrid();
-            setUpCategoryGrid();
-            populateCategoryDataGrid();
+            InitializeDataGrid();
+            SetUpCategoryGrid();
+            PopulateCategoryDataGrid();
             //Make an event handlers
             ToggleEventsHandle(true);
 
@@ -37,23 +39,22 @@ namespace FPCoderCafe.UserControls
         {
             if (toggle)
             {
-                SaveCategoryButton.Click += saveCategoryOnClick;
+                SaveCategoryButton.Click += SaveCategoryOnClick;
                 UpdateCategoryButton.Click += UpdateCategoryOnClick;
                 DeleteCategoryButton.Click += DeleteCategoryOnClick;
-                SelectImageButton.Click += selectFile;
-                CategoryDataGrid.SelectionChanged += displayCategoryToUpdate;
+                SelectImageButton.Click += SelectFile;
+                CategoryDataGrid.SelectionChanged += DisplayCategoryToUpdate;
             }
             else
             {
-                SaveCategoryButton.Click -= saveCategoryOnClick;
+                SaveCategoryButton.Click -= SaveCategoryOnClick;
                 UpdateCategoryButton.Click -= UpdateCategoryOnClick;
                 DeleteCategoryButton.Click -= DeleteCategoryOnClick;
-                SelectImageButton.Click -= selectFile;
-                CategoryDataGrid.SelectionChanged -= displayCategoryToUpdate;
+                SelectImageButton.Click -= SelectFile;
+                CategoryDataGrid.SelectionChanged -= DisplayCategoryToUpdate;
             }
         }
-
-        private void selectFile(object o, EventArgs e)
+        private void SelectFile(object o, EventArgs e)
         {
             OpenFileDialog openFileDialogue = new OpenFileDialog();
             openFileDialogue.InitialDirectory = "c:\\temp";
@@ -84,13 +85,13 @@ namespace FPCoderCafe.UserControls
             
         }
 
-        private void setUpCategoryGrid()
+        private void SetUpCategoryGrid()
         {
             CategoryDataGrid.SelectionMode = DataGridSelectionMode.Single;
             CategoryDataGrid.IsReadOnly = true;
         }
 
-        private void initializeDataGrid()
+        private void InitializeDataGrid()
         {
             //Create columns for the datagrid
             DataGridTextColumn CategoryNameNoColumn = new DataGridTextColumn();
@@ -110,7 +111,7 @@ namespace FPCoderCafe.UserControls
             CategoryDataGrid.Columns.Add(ImageNamecolumn);
 
         }
-        private void populateCategoryDataGrid()
+        private void PopulateCategoryDataGrid()
         {
             CategoryDataGrid.Items.Clear();
             using(var ctx = new PointOfSaleContext())
@@ -124,7 +125,7 @@ namespace FPCoderCafe.UserControls
                 }
             }
         }
-        private void saveCategoryOnClick(Object s, EventArgs e)
+        private void SaveCategoryOnClick(Object s, EventArgs e)
         {
 
             if (CategoryTextBox.Text == "" || ImagePathTextBox.Text == "")
@@ -144,14 +145,39 @@ namespace FPCoderCafe.UserControls
                     ctx.Categories.Add(newCategory);
                     ctx.SaveChanges();
                 }
-                populateCategoryDataGrid();
-                clearTextBox();
+                /* string csvFileName = Directory.GetCurrentDirectory() + @"..\..\..\Data\Category.csv";
+                 string nameDetails = newCategory.Name + ", " + newCategory.Description + ", " + newCategory.ImageName;
+                 if (!File.Exists(csvFileName))
+                     {
+                     using (sw = new StreamWriter(new FileStream(csvFileName, FileMode.Create, FileAccess.Write)))
+                     {
+                         string nameHeader = "Categpry name,Description,Image name\n"; //No point concatenating
+                     }
+                 } File.AppendAllText(csvFileName, nameDetails);*/
+                var filepath = @"\Category.csv\";
+                if (!File.Exists(filepath))
+                {
+                    using (sw = new StreamWriter(new FileStream(filepath, FileMode.Create, FileAccess.Write)))
+                    {
+                        sw.Write(newCategory.Name + ", " + newCategory.Description + ", " + newCategory.ImageName);
+                    }
+                }
+                else
+                {
+                    using (sw = new StreamWriter(new FileStream(filepath, FileMode.Open, FileAccess.Write)))
+                    {
+                        sw.Write(newCategory.Name + ", " + newCategory.Description + ", " + newCategory.ImageName);
+                    }
+                }
+
+                PopulateCategoryDataGrid();
+                ClearTextBox();
             }
 
         }
-        private void displayCategoryToUpdate(Object s, EventArgs e)
+        private void DisplayCategoryToUpdate(Object s, EventArgs e)
         {
-            if(CategoryDataGrid.SelectedItem != null)
+            if (CategoryDataGrid.SelectedItem != null)
             {
                 //Get the selected category
                 Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
@@ -161,12 +187,15 @@ namespace FPCoderCafe.UserControls
                 CategoryDescripTextBox.Text = selectedCategory.Description;
                 ImagePathTextBox.Text = selectedCategory.ImageName;
                 string des = Directory.GetCurrentDirectory() + @"\Images\" + selectedCategory.ImageName;
-                CategoryImage.Source = new BitmapImage(new Uri(des));     
+                CategoryImage.Source = new BitmapImage(new Uri(des));
                 UpdateCategoryButton.IsEnabled = true;
+                SaveCategoryButton.IsEnabled = false;
             }
             else
             {
-                UpdateCategoryButton.IsEnabled = false;
+                UpdateCategoryButton.IsEnabled = false; 
+                SaveCategoryButton.IsEnabled = true;
+
             }
         }
 
@@ -178,19 +207,27 @@ namespace FPCoderCafe.UserControls
                 int idToUpdate = selectedCategory.Id;
                 //Pull the repestive phone for the id we have
                 Category uc = (Category)ctx.Categories.Where(x => x.Id == idToUpdate).First();
+                if (CategoryTextBox.Text.Equals("") || CategoryDescripTextBox.Text.Equals(""))
+                {
+                    MessageBox.Show("Please enter category name and description to update.");
+                    return;
+                }
+                 
                 //Reconstruct the object based on the form data
                 uc.Name = CategoryTextBox.Text;
                 uc.Description = CategoryDescripTextBox.Text;
                 uc.ImageName = ImagePathTextBox.Text;
+              
+                   
                 //Update the object
                 ctx.Categories.Update(uc);
                 //Save changes
                 ctx.SaveChanges();
                 //Update datagrid
-                populateCategoryDataGrid();
+                PopulateCategoryDataGrid();
             }
             //Clear the textbox after clicking update button
-            clearTextBox();
+            ClearTextBox();
         }
         private void DeleteCategoryOnClick(Object s, EventArgs e)
         {
@@ -202,11 +239,11 @@ namespace FPCoderCafe.UserControls
                 Category uc = (Category)ctx.Categories.Where(x => x.Id == idToUpdate).First();
                 ctx.Categories.Remove(uc);
                 ctx.SaveChanges();
-                populateCategoryDataGrid();
+                PopulateCategoryDataGrid();
             }
-            clearTextBox();
+            ClearTextBox();
         }
-        private void clearTextBox()
+        private void ClearTextBox()
         {
             //clear the text box anf image view
             CategoryTextBox.Text = "";
