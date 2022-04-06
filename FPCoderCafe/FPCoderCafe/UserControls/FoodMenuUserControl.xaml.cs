@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,6 +34,9 @@ namespace FPCoderCafe.UserControls
 
             SecondGrid.Visibility = Visibility.Collapsed;
             ThirdGrid.Visibility = Visibility.Collapsed;
+            SignInGrid.Visibility = Visibility.Collapsed;
+            SignUpGrid.Visibility = Visibility.Collapsed;
+            PaymentGrid.Visibility = Visibility.Collapsed;
 
             InitializeCategoryListBox();
             initializeDataGrid();
@@ -52,6 +56,8 @@ namespace FPCoderCafe.UserControls
                 MediumSize.Checked += SizeChange;
                 LargeSize.Checked += SizeChange;
                 AddItemButton.Click += AddItemButtonClick;
+                MakePayButton.Click += FinishPayButtonClick;
+                DeleteButton.Click += DeleteItemButtonClick;
             }
             else
             {
@@ -63,6 +69,8 @@ namespace FPCoderCafe.UserControls
                 MediumSize.Checked -= SizeChange;
                 LargeSize.Checked -= SizeChange;
                 AddItemButton.Click -= AddItemButtonClick;
+                MakePayButton.Click -= FinishPayButtonClick;
+                DeleteButton.Click -= DeleteItemButtonClick;
             }
         }
 
@@ -79,9 +87,19 @@ namespace FPCoderCafe.UserControls
         {
             ProductListBox.UnselectAll();
 
+            ResetThirdGrid();
+
             ThirdGrid.Visibility = Visibility.Collapsed;
 
             SecondGrid.Visibility = Visibility.Visible;
+        }
+
+        private void ResetThirdGrid()
+        {
+            ItemImage.Source = null;
+            SmallSize.IsChecked = true;
+            QuantityTextBox.Text = "";
+            NoteTextBox.Text = "";
         }
 
         private void CategorySelected(object o, EventArgs e)
@@ -122,6 +140,18 @@ namespace FPCoderCafe.UserControls
                 using (var ctx = new PointOfSaleContext())
                 {
                     var getProductItem = ctx.Products.Where(x => x.Id == getSelectedItem.Id).First();
+
+                    if (getProductItem.MediumPrice == null || getProductItem.MediumPrice == 0)
+                    {
+                        SmallSize.Visibility = Visibility.Collapsed;
+                        MediumSize.Visibility = Visibility.Collapsed;
+                        LargeSize.Visibility = Visibility.Collapsed;
+                    } else
+                    {
+                        SmallSize.Visibility = Visibility.Visible;
+                        MediumSize.Visibility = Visibility.Visible;
+                        LargeSize.Visibility = Visibility.Visible;
+                    }
 
                     PlaceProductId.Text = getProductItem.Id.ToString();
                     ProductNameText.Content = getProductItem.Name;
@@ -195,6 +225,11 @@ namespace FPCoderCafe.UserControls
 
         private void AddItemButtonClick(object o, EventArgs e)
         {
+            if (ValidateUserInput())
+            {
+                return;
+            }
+
             TempItem newItem = new TempItem();
 
             newItem.ProductId = int.Parse(PlaceProductId.Text);
@@ -202,7 +237,18 @@ namespace FPCoderCafe.UserControls
             newItem.Quantity = int.Parse(QuantityTextBox.Text);
             if (SmallSize.IsChecked == true)
             {
-                newItem.Size = Item.Size.Small.ToString();
+                using (var ctx = new PointOfSaleContext()) {
+                    var getProductItem = ctx.Products.Where(x => x.Id == int.Parse(PlaceProductId.Text)).First();
+
+                    if (getProductItem.MediumPrice == null)
+                    {
+                        newItem.Size = "Default";
+                    }
+                    else
+                    {
+                        newItem.Size = Item.Size.Small.ToString();
+                    }
+                }
             }
             else if (MediumSize.IsChecked == true)
             {
@@ -220,11 +266,54 @@ namespace FPCoderCafe.UserControls
             ProductListBox.UnselectAll();
             CategoryListBox.UnselectAll();
 
+            ResetThirdGrid();
+
             ThirdGrid.Visibility = Visibility.Collapsed;
             SecondGrid.Visibility = Visibility.Collapsed;
             CategoryListBox.Visibility = Visibility.Visible;
 
 
+        }
+
+        private bool ValidateUserInput()
+        {
+            if (SmallSize.IsChecked == false && 
+                MediumSize.IsChecked == false && 
+                LargeSize.IsChecked == false)
+            {
+                MessageBox.Show("Please select a Size!");
+                return true;
+            }
+
+            if (QuantityTextBox.Text == "")
+            {
+                MessageBox.Show("Please enter Quantity of Item!");
+                return true;
+            }
+
+            if (!Regex.IsMatch(QuantityTextBox.Text, @"^\d+$"))
+            {
+                MessageBox.Show("Please enter Cardinal Number for Quantity and more than 1");
+                return true;
+            }
+
+            if (int.Parse(QuantityTextBox.Text) <= 0)
+            {
+                MessageBox.Show("Please input more than 1 for Quantity of Item");
+                return true;
+            }
+
+            return false;
+        }
+
+        private void FinishPayButtonClick(object o, EventArgs e)
+        {
+            
+        }
+
+        private void DeleteItemButtonClick(object o, EventArgs e)
+        {
+            ItemDataGrid.Items.Remove(ItemDataGrid.SelectedItem);
         }
 
         public class TempItem
