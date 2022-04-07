@@ -22,6 +22,7 @@
         <Button x:Name="DeleteCategoryButton" Content="Delete" Grid.Column="1" HorizontalAlignment="Left" Margin="263,275,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15"/>
         <Button x:Name="UpdateCategoryButton" Content="Update" Grid.Column="1" HorizontalAlignment="Left" Margin="263,223,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15"/>
         <TextBox x:Name="ImagePathTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="197,137,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" FontSize="15" IsReadOnly="True"/>
+        <Button x:Name="CancelButton" Content="Cancel" Grid.Column="1" HorizontalAlignment="Left" Margin="541,397,0,0" VerticalAlignment="Top" Width="75" Background="Wheat" FontSize="15" RenderTransformOrigin="0.721,2.1"/>
 
     </Grid>
 </UserControl>
