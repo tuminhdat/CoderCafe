@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FPCoderCafe.Entities;
+using FPCoderCafe.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,10 +23,13 @@ namespace FPCoderCafe.UserControls
     /// </summary>
     public partial class ControlPanelUserControl : UserControl
     {
+        List<Customer> customerList = new List<Customer>();
         public ControlPanelUserControl()
         {
             InitializeComponent();
             LoadSettings();
+            InititializeUserInfoDataGrid();
+            PopulateUserInfoDataGrid();
             ToggleEventHandlers(true);
         }
 
@@ -39,6 +44,7 @@ namespace FPCoderCafe.UserControls
             {
                 SaveButton.Click += SaveSettingEventHandler;
                 SwitchModeButton.Click += SwitchModeEventHandler;
+                CustomerInfoDataGrid.SelectionChanged += DisplayUserInfo;
             }
             else
             {
@@ -69,6 +75,40 @@ namespace FPCoderCafe.UserControls
         public void SwitchModeEventHandler(object o, EventArgs args)
         {
             MainWindow.GetMainWindow().MainFrame.Content = new FoodMenuUserControl();
+        }
+
+        private void InititializeUserInfoDataGrid()
+        {
+            //Create columns for the datagrid
+            DataGridTextColumn PhoneColumn = new DataGridTextColumn();
+            PhoneColumn.Header = "Customer Phone Number";
+            PhoneColumn.Binding = new Binding("Phone");
+
+            DataGridTextColumn RedeemPointColumn = new DataGridTextColumn();
+            RedeemPointColumn.Header = "Redeem Point";
+            RedeemPointColumn.Binding = new Binding("RedeemPoint");
+
+            CustomerInfoDataGrid.Columns.Add(PhoneColumn);
+            CustomerInfoDataGrid.Columns.Add(RedeemPointColumn);
+        }
+
+        private void PopulateUserInfoDataGrid()
+        {
+            CustomerInfoDataGrid.Items.Clear();
+            using(var ctx = new PointOfSaleContext())
+            {
+                customerList = ctx.Customers.Where(x => x.IsEnable).ToList();
+                foreach(Customer c in customerList)
+                {
+                    CustomerInfoDataGrid.Items.Add(c);
+                }
+            }
+        }
+        private void DisplayUserInfo(object o, EventArgs e)
+        {
+            Customer customer = (Customer)CustomerInfoDataGrid.SelectedItem;
+            CustomerPhoneText.Text = customer.Phone;
+            RedeemPointText.Text = customer.RedeemPoint;
         }
     }
 }

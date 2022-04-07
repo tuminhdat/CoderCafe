@@ -128,7 +128,7 @@ namespace FPCoderCafe.UserControls
                 }
             }
         }
-        private void SaveCategoryOnClick(Object s, EventArgs e)
+        private void SaveCategoryOnClick(object o, EventArgs e)
         {
             if (CategoryTextBox.Text == "" || ImagePathTextBox.Text == "")
             {
@@ -178,7 +178,7 @@ namespace FPCoderCafe.UserControls
             }
 
         }
-        private void DisplayCategoryToUpdate(Object s, EventArgs e)
+        private void DisplayCategoryToUpdate(object o, EventArgs e)
         {
             if (CategoryDataGrid.SelectedItem != null)
             {
@@ -201,7 +201,7 @@ namespace FPCoderCafe.UserControls
             }
         }
 
-        private void UpdateCategoryOnClick(Object s, EventArgs e)
+        private void UpdateCategoryOnClick(object o, EventArgs e)
         {
             using(var ctx = new PointOfSaleContext())
             {
@@ -233,7 +233,7 @@ namespace FPCoderCafe.UserControls
             //Clear the textbox after clicking update button
             ClearTextBox();
         }
-        private void DeleteCategoryOnClick(Object s, EventArgs e)
+        private void DeleteCategoryOnClick(object o, EventArgs e)
         {
             using(var ctx = new PointOfSaleContext())
             {
