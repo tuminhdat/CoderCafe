@@ -78,11 +78,12 @@ namespace FPCoderCafe.UserControls
             FoodDataGrid.Columns.Add(descriptionColumn);
         }
 
-        private void SetupCategory()
+        public void SetupCategory()
         {
+            CategoryComboBox.Items.Clear();
             using (var context = new PointOfSaleContext())
             {
-                var categories = context.Categories.ToList();
+                var categories = context.Categories.Where(x => x.IsEnable).ToList();
                 foreach (var category in categories)
                 {
                     CategoryComboBox.Items.Add(category);
@@ -123,9 +124,8 @@ namespace FPCoderCafe.UserControls
             product.MediumPrice = (decimal.TryParse(MediumPriceTextBox.Text, out var mediumPrice) && mediumPrice > 0) ? mediumPrice : (decimal?)null;
             product.LargePrice = (decimal.TryParse(LargePriceTextBox.Text, out var largePrice) && largePrice > 0) ? largePrice : (decimal?)null;
             product.ImageName = ImagePathTextBox.Text;
-            product.IsEnabled = true;
             //Cast the selected item in category combobox into a category object
-            Category category = ((Category)CategoryComboBox.SelectedItem);
+            Category category = (Category)CategoryComboBox.SelectedItem;
             if (category != null) product.CategoryId = category.Id;
             //Validate input, require name, category and at least one valid price
             if (!string.IsNullOrEmpty(product.Name) && category != null &&
@@ -171,7 +171,6 @@ namespace FPCoderCafe.UserControls
                     product.MediumPrice = (decimal.TryParse(MediumPriceTextBox.Text, out var mediumPrice) && mediumPrice > 0) ? mediumPrice : (decimal?)null;
                     product.LargePrice = (decimal.TryParse(LargePriceTextBox.Text, out var largePrice) && largePrice > 0) ? largePrice : (decimal?)null;
                     product.ImageName = ImagePathTextBox.Text;
-                    product.IsEnabled = true;
                     //Cast the selected item in category combobox into a category object
                     Category category = ((Category)CategoryComboBox.SelectedItem);
                     if (category != null) product.CategoryId = category.Id;
@@ -249,9 +248,13 @@ namespace FPCoderCafe.UserControls
             }
         }
 
-        private void ProductSelectedEventHandler(object o, EventArgs args)
+        private void ProductSelectedEventHandler(object o, SelectionChangedEventArgs args)
         {
-            if (o != FoodDataGrid) return;
+            if (o != FoodDataGrid)
+            {
+                args.Handled = true;
+                return;
+            }
             Product product = (Product)FoodDataGrid.SelectedItem;
             if (product != null)
             {
@@ -290,9 +293,10 @@ namespace FPCoderCafe.UserControls
                 UpdateButton.IsEnabled = false;
                 DeleteButton.IsEnabled = false;
             }
+            args.Handled = true;
         }
 
-        private void ClearInput()
+        public void ClearInput()
         {
             NameTextBox.Text = "";
             DescriptionTextBox.Text = "";
@@ -304,14 +308,14 @@ namespace FPCoderCafe.UserControls
             CategoryComboBox.SelectedItem = null;
         }
 
-        private void UpdateDataGrid()
+        public void UpdateDataGrid()
         {
             //Only load enabled product.
             //Products that are disabled are still in database for generating sales report purpose
             using (var context = new PointOfSaleContext())
             {
                 //Using Include method to avoid Category being null from lazyloading.
-                Products = context.Products.Include(x => x.Category).Where(x => x.IsEnabled).ToList();
+                Products = context.Products.Include(x => x.Category).Where(x => x.IsEnabled && x.Category.IsEnable).ToList();
             }
             FoodDataGrid.Items.Clear();
             Products.ForEach(x => FoodDataGrid.Items.Add(x));

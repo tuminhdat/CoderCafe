@@ -22,6 +22,7 @@ namespace FPCoderCafe.Entities
         public string FullImagePath { get => Directory.GetCurrentDirectory() + @"\Images\" + ImageName; }
         public Category()
         {
+            IsEnable = true;
         }
     }
 }

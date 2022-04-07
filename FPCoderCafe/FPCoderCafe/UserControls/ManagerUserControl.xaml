@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:FPCoderCafe.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="Aqua">
-    <TabControl>
+    <TabControl Name="MainTabControl">
         <TabItem Header="Manage Food" Width="200">
-            <local:FoodUserControl/>
+            <local:FoodUserControl x:Name="FoodControl"/>
         </TabItem>
         <TabItem Header="Manage Category" Width="200">
             <local:CategoryUserControl/>

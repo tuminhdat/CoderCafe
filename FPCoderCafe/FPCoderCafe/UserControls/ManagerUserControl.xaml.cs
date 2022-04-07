@@ -23,6 +23,32 @@ namespace FPCoderCafe.UserControls
         public ManagerUserControl()
         {
             InitializeComponent();
+            ToggleEventHandler(true);
+        }
+
+        void ToggleEventHandler(bool toggle)
+        {
+            if (toggle)
+            {
+                MainTabControl.SelectionChanged += TabControlSelectionChangeEventHandler;
+            }
+            else
+            {
+                MainTabControl.SelectionChanged -= TabControlSelectionChangeEventHandler;
+            }
+        }
+
+        void TabControlSelectionChangeEventHandler(object o, SelectionChangedEventArgs args)
+        {
+            if (o != MainTabControl) return;
+            if (!(args.OriginalSource is TabControl)) return;
+            TabItem tab = MainTabControl.SelectedItem as TabItem;
+            if (tab.Content == FoodControl)
+            {
+                FoodControl.SetupCategory();
+                FoodControl.ClearInput();
+                FoodControl.UpdateDataGrid();
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace FPCoderCafe.Entities
         public string FullImagePath { get => "/Images/" + ImageName; }
         public Product()
         {
+            IsEnabled = true;
         }
     }
 }
