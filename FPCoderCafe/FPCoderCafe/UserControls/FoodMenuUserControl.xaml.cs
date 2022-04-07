@@ -58,6 +58,9 @@ namespace FPCoderCafe.UserControls
                 SmallButton.Click += SmallButtonClick;
                 MediumButton.Click += MediumButtonClick;
                 LargeButton.Click += LargeButtonClick;
+                DebitButton.Click += DebitButtonClick;
+                CreditButton.Click += CreditButtonClick;
+                PaymentButton.Click += BackButtonOfPayment;
             }
             else
             {
@@ -71,6 +74,9 @@ namespace FPCoderCafe.UserControls
                 SmallButton.Click -= SmallButtonClick;
                 MediumButton.Click -= MediumButtonClick;
                 LargeButton.Click -= LargeButtonClick;
+                DebitButton.Click -= DebitButtonClick;
+                CreditButton.Click -= CreditButtonClick;
+                PaymentButton.Click -= BackButtonOfPayment;
             }
         }
 
@@ -94,8 +100,16 @@ namespace FPCoderCafe.UserControls
             SecondGrid.Visibility = Visibility.Visible;
         }
 
+        private void BackButtonOfPayment(object o, EventArgs e)
+        {
+            PaymentGrid.Visibility = Visibility.Collapsed;
+
+            CategoryListBox.Visibility = Visibility.Visible;
+        }
+
         private void ResetThirdGrid()
         {
+            PlaceProductId.Text = "";
             ItemImage.Source = null;
             QuantityTextBox.Text = "";
             NoteTextBox.Text = "";
@@ -234,15 +248,15 @@ namespace FPCoderCafe.UserControls
             newItem.ProductId = int.Parse(PlaceProductId.Text);
             newItem.ProductName = ProductNameText.Content.ToString();
             newItem.Quantity = int.Parse(QuantityTextBox.Text);
-            if (SmallButton.Background == Brushes.LightGray)
+            if (SmallButton.Background == Brushes.LightBlue)
             {
                 newItem.Size = Item.Size.Small.ToString();
             }
-            else if (MediumButton.Background == Brushes.LightGray)
+            else if (MediumButton.Background == Brushes.LightBlue)
             {
                 newItem.Size = Item.Size.Medium.ToString();
             }
-            else if (LargeButton.Background == Brushes.LightGray)
+            else if (LargeButton.Background == Brushes.LightBlue)
             {
                 newItem.Size = Item.Size.Large.ToString();
             }
@@ -298,7 +312,29 @@ namespace FPCoderCafe.UserControls
 
         private void FinishPayButtonClick(object o, EventArgs e)
         {
-            
+            if (ItemDataGrid.Items.Count == 0)
+            {
+                MessageBox.Show("Sorry, You don't have any Item to checkout. Please add at least an Item");
+                return;
+            }
+
+            MakePayButton.IsEnabled = false;
+            DeleteButton.IsEnabled = false;
+            ResetThirdGrid();
+            ProductListBox.UnselectAll();
+            CategoryListBox.UnselectAll();
+            CategoryListBox.Visibility = Visibility.Collapsed;
+            SecondGrid.Visibility = Visibility.Collapsed;
+            ThirdGrid.Visibility = Visibility.Collapsed;
+            PaymentGrid.Visibility = Visibility.Visible;
+
+            double beforeTax = tempItems.Select(x => x.TotalPrice).Sum();
+            double tax = beforeTax * 5 / 100;
+            double afterTax = beforeTax + tax;
+
+            BeforeTaxTextBox.Text = "$" + Math.Round(beforeTax, 2).ToString();
+            TaxTextBox.Text = "$" + Math.Round(tax, 2).ToString();
+            AfterTaxTextBox.Text = "$" + Math.Round(afterTax, 2).ToString();
         }
 
         private void DeleteItemButtonClick(object o, EventArgs e)
@@ -319,7 +355,7 @@ namespace FPCoderCafe.UserControls
             using (var ctx = new PointOfSaleContext())
             {
                 var getProductItem = ctx.Products.Where(x => x.Id == currentProductId).First();
-                PriceTextBlock.Text = "$" + getProductItem.SmallPrice.ToString();
+                PriceTextBlock.Text = getProductItem.SmallPrice.ToString();
             }
         }
 
@@ -333,7 +369,7 @@ namespace FPCoderCafe.UserControls
             using (var ctx = new PointOfSaleContext())
             {
                 var getProductItem = ctx.Products.Where(x => x.Id == currentProductId).First();
-                PriceTextBlock.Text = "$" + getProductItem.MediumPrice.ToString();
+                PriceTextBlock.Text = getProductItem.MediumPrice.ToString();
             }
         }
 
@@ -346,9 +382,23 @@ namespace FPCoderCafe.UserControls
             using (var ctx = new PointOfSaleContext())
             {
                 var getProductItem = ctx.Products.Where(x => x.Id == currentProductId).First();
-                PriceTextBlock.Text = "$" + getProductItem.LargePrice.ToString();
+                PriceTextBlock.Text = getProductItem.LargePrice.ToString();
             }
         }
+
+        private void DebitButtonClick(object o, EventArgs e)
+        {
+            DebitButton.Background = Brushes.LightBlue;
+            CreditButton.Background = Brushes.LightGray;
+        }
+
+        private void CreditButtonClick(object o, EventArgs e)
+        {
+            DebitButton.Background = Brushes.LightGray;
+            CreditButton.Background = Brushes.LightBlue;
+        }
+
+
 
         public class TempItem
         {
