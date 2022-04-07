@@ -183,6 +183,10 @@
     <Compile Include="Migrations\20220328212253_InitialCreate.designer.cs">
       <DependentUpon>20220328212253_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20220407000923_AddIsEnableColumns.cs" />
+    <Compile Include="Migrations\20220407000923_AddIsEnableColumns.designer.cs">
+      <DependentUpon>20220407000923_AddIsEnableColumns.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\PointOfSaleContextModelSnapshot.cs" />
     <Compile Include="UserControls\CategoryUserControl.xaml.cs">
       <DependentUpon>CategoryUserControl.xaml</DependentUpon>
