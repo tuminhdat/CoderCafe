@@ -51,8 +51,7 @@
             <TextBox x:Name="QuantityTextBox" HorizontalAlignment="Left" Height="23" Margin="71,140,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
             <Label Content="Note:" HorizontalAlignment="Left" Margin="10,166,0,0" VerticalAlignment="Top"/>
             <TextBox x:Name="NoteTextBox" HorizontalAlignment="Left" Height="107" Margin="71,170,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="280"/>
-            <Label Content="Price per one:" HorizontalAlignment="Left" Margin="10,280,0,0" VerticalAlignment="Top"/>
-            <TextBlock x:Name="PriceTextBlock" HorizontalAlignment="Left" Margin="95,285,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+            <TextBlock x:Name="PriceTextBlock" HorizontalAlignment="Left" Margin="95,285,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Visibility="Collapsed"/>
             <Button x:Name="ThirdGridBack" Content="Back" HorizontalAlignment="Left" Margin="10,331,0,0" VerticalAlignment="Top" Width="75"/>
             <Button x:Name="AddItemButton" Content="Add" HorizontalAlignment="Left" Margin="276,331,0,0" VerticalAlignment="Top" Width="75"/>
             <TextBlock x:Name="PlaceProductId" HorizontalAlignment="Left" Margin="311,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="0.629,1.441" Visibility="Collapsed"/>
@@ -61,9 +60,9 @@
             <Button x:Name="MediumButton" Content="" HorizontalAlignment="Left" Margin="140,115,0,0" VerticalAlignment="Top" Width="125" Background="LightGray"/>
             <Button x:Name="LargeButton" Content="" HorizontalAlignment="Left" Margin="270,115,0,0" VerticalAlignment="Top" Width="125" Background="LightGray"/>
         </Grid>
-        <DataGrid x:Name="ItemDataGrid" HorizontalAlignment="Left" Height="410" Margin="497,10,0,0" VerticalAlignment="Top" Width="480" IsReadOnly="True"/>
-        <Button x:Name="MakePayButton" Content="Finish And Pay" HorizontalAlignment="Left" Margin="870,456,0,0" VerticalAlignment="Top" Width="107" RenderTransformOrigin="0.653,-0.35"/>
-        <Button x:Name="DeleteButton" Content="Delete Item" HorizontalAlignment="Left" Margin="782,456,0,0" VerticalAlignment="Top" Width="83"/>
+        <DataGrid x:Name="ItemDataGrid" HorizontalAlignment="Left" Height="410" Margin="493,10,0,0" VerticalAlignment="Top" Width="480" IsReadOnly="True"/>
+        <Button x:Name="MakePayButton" Content="Finish And Pay" HorizontalAlignment="Left" Margin="866,456,0,0" VerticalAlignment="Top" Width="107" RenderTransformOrigin="0.653,-0.35"/>
+        <Button x:Name="DeleteButton" Content="Delete Item" HorizontalAlignment="Left" Margin="778,456,0,0" VerticalAlignment="Top" Width="83"/>
         <Grid x:Name="SignUpGrid" HorizontalAlignment="Left" Height="182" Margin="261,112,0,0" VerticalAlignment="Top" Width="458" Background="White">
             <Label Content="Sign up" HorizontalAlignment="Left" Margin="176,10,0,0" VerticalAlignment="Top" Height="59" Width="190" FontSize="24"/>
             <Label Content="Phone Number" HorizontalAlignment="Left" Margin="113,74,0,0" VerticalAlignment="Top"/>
@@ -82,18 +81,25 @@
             <Button Content="Submit" HorizontalAlignment="Left" Margin="253,133,0,0" VerticalAlignment="Top" Width="75"/>
             <Button Content="Back" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
         </Grid>
-        <Grid x:Name="PaymentGrid" HorizontalAlignment="Left" Height="254" Margin="32,499,0,0" VerticalAlignment="Top" Width="458" Background="White">
+        <Grid x:Name="PaymentGrid" HorizontalAlignment="Left" Height="410" Margin="10,10,0,0" VerticalAlignment="Top" Width="450" Background="White">
             <Label Content="Payment" HorizontalAlignment="Left" Margin="171,10,0,0" VerticalAlignment="Top" Height="47" Width="164" FontSize="24"/>
             <Button Content="SignIn/SignUp" HorizontalAlignment="Left" Margin="355,10,0,0" VerticalAlignment="Top" Width="93"/>
             <Label x:Name="UserPhoneNum" Content="" HorizontalAlignment="Left" Margin="355,10,0,0" VerticalAlignment="Top"/>
             <Label x:Name="UserPoint" Content="" HorizontalAlignment="Left" Margin="355,30,0,0" VerticalAlignment="Top"/>
-            <Button x:Name="DebitButton" Content="Debit" HorizontalAlignment="Left" Margin="31,61,0,0" VerticalAlignment="Top" Width="75" FontSize="20"/>
-            <Button x:Name="CreditButton" Content="Credit" HorizontalAlignment="Left" Margin="111,61,0,0" VerticalAlignment="Top" Width="75" FontSize="20"/>
-            <Button x:Name="PointButton" Content="Saving Point" HorizontalAlignment="Left" Margin="31,97,0,0" VerticalAlignment="Top" Width="155" FontSize="20"/>
-
+            <Button x:Name="DebitButton" Content="Debit" HorizontalAlignment="Left" Margin="39,73,0,0" VerticalAlignment="Top" Width="75" FontSize="20" Background="LightGray"/>
+            <Button x:Name="CreditButton" Content="Credit" HorizontalAlignment="Left" Margin="39,130,0,0" VerticalAlignment="Top" Width="75" FontSize="20" RenderTransformOrigin="0.213,1.935" Background="LightGray"/>
+            <Button x:Name="PointButton" Content="Saving Point" HorizontalAlignment="Left" Margin="39,184,0,0" VerticalAlignment="Top" Width="155" FontSize="20" Background="LightGray"/>
+            <Label Content="Price Before Tax:" HorizontalAlignment="Left" Margin="227,108,0,0" VerticalAlignment="Top"/>
+            <Label Content="Tax GST (5%)" HorizontalAlignment="Left" Margin="227,139,0,0" VerticalAlignment="Top"/>
+            <Label Content="Price After Text" HorizontalAlignment="Left" Margin="227,170,0,0" VerticalAlignment="Top"/>
+            <Label Content="Summary" HorizontalAlignment="Left" Margin="227,73,0,0" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"/>
+            <TextBox x:Name="BeforeTaxTextBox" HorizontalAlignment="Left" Height="23" Margin="328,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+            <TextBox x:Name="TaxTextBox" HorizontalAlignment="Left" Height="23" Margin="328,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+            <TextBox x:Name="AfterTaxTextBox" HorizontalAlignment="Left" Height="23" Margin="328,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+            <Button x:Name="PaymentButton" Content="Back" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
         </Grid>
-        <Label Content="Total Before Tax" HorizontalAlignment="Left" Margin="759,425,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TotalPrice" HorizontalAlignment="Left" Height="23" Margin="857,426,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Total Before Tax" HorizontalAlignment="Left" Margin="755,425,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TotalPrice" HorizontalAlignment="Left" Height="23" Margin="853,429,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.4,0.304" IsReadOnly="True"/>
 
     </Grid>
 </UserControl>
