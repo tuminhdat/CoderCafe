@@ -86,16 +86,16 @@
             <Button Content="SignIn/SignUp" HorizontalAlignment="Left" Margin="355,10,0,0" VerticalAlignment="Top" Width="93"/>
             <Label x:Name="UserPhoneNum" Content="" HorizontalAlignment="Left" Margin="355,10,0,0" VerticalAlignment="Top"/>
             <Label x:Name="UserPoint" Content="" HorizontalAlignment="Left" Margin="355,30,0,0" VerticalAlignment="Top"/>
-            <Button x:Name="DebitButton" Content="Debit" HorizontalAlignment="Left" Margin="39,73,0,0" VerticalAlignment="Top" Width="75" FontSize="20" Background="LightGray"/>
-            <Button x:Name="CreditButton" Content="Credit" HorizontalAlignment="Left" Margin="39,130,0,0" VerticalAlignment="Top" Width="75" FontSize="20" RenderTransformOrigin="0.213,1.935" Background="LightGray"/>
-            <Button x:Name="PointButton" Content="Saving Point" HorizontalAlignment="Left" Margin="39,184,0,0" VerticalAlignment="Top" Width="155" FontSize="20" Background="LightGray"/>
-            <Label Content="Price Before Tax:" HorizontalAlignment="Left" Margin="227,108,0,0" VerticalAlignment="Top"/>
-            <Label Content="Tax GST (5%)" HorizontalAlignment="Left" Margin="227,139,0,0" VerticalAlignment="Top"/>
-            <Label Content="Price After Text" HorizontalAlignment="Left" Margin="227,170,0,0" VerticalAlignment="Top"/>
-            <Label Content="Summary" HorizontalAlignment="Left" Margin="227,73,0,0" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"/>
-            <TextBox x:Name="BeforeTaxTextBox" HorizontalAlignment="Left" Height="23" Margin="328,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
-            <TextBox x:Name="TaxTextBox" HorizontalAlignment="Left" Height="23" Margin="328,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
-            <TextBox x:Name="AfterTaxTextBox" HorizontalAlignment="Left" Height="23" Margin="328,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+            <Button x:Name="DebitButton" Content="Debit" HorizontalAlignment="Left" Margin="22,73,0,0" VerticalAlignment="Top" Width="75" FontSize="20" Background="LightGray"/>
+            <Button x:Name="CreditButton" Content="Credit" HorizontalAlignment="Left" Margin="22,130,0,0" VerticalAlignment="Top" Width="75" FontSize="20" RenderTransformOrigin="0.213,1.935" Background="LightGray"/>
+            <Button x:Name="PointButton" Content="Saving Point" HorizontalAlignment="Left" Margin="22,184,0,0" VerticalAlignment="Top" Width="155" FontSize="20" Background="LightGray"/>
+            <Label Content="Price Before Tax:" HorizontalAlignment="Left" Margin="211,108,0,0" VerticalAlignment="Top"/>
+            <Label Content="Tax GST (5%)" HorizontalAlignment="Left" Margin="211,139,0,0" VerticalAlignment="Top"/>
+            <Label Content="Price After Text" HorizontalAlignment="Left" Margin="211,170,0,0" VerticalAlignment="Top"/>
+            <Label Content="Summary" HorizontalAlignment="Left" Margin="211,73,0,0" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"/>
+            <TextBox x:Name="BeforeTaxTextBox" HorizontalAlignment="Left" Height="23" Margin="312,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+            <TextBox x:Name="TaxTextBox" HorizontalAlignment="Left" Height="23" Margin="312,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+            <TextBox x:Name="AfterTaxTextBox" HorizontalAlignment="Left" Height="23" Margin="312,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
             <Button x:Name="PaymentButton" Content="Back" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
         </Grid>
         <Label Content="Total Before Tax" HorizontalAlignment="Left" Margin="755,425,0,0" VerticalAlignment="Top"/>
