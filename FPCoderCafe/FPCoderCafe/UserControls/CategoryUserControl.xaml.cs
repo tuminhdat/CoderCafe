@@ -31,7 +31,6 @@ namespace FPCoderCafe.UserControls
             PopulateCategoryDataGrid();
             //Make an event handlers
             ToggleEventsHandle(true);
-
         }
 
 
@@ -44,6 +43,7 @@ namespace FPCoderCafe.UserControls
                 DeleteCategoryButton.Click += DeleteCategoryOnClick;
                 SelectImageButton.Click += SelectFile;
                 CategoryDataGrid.SelectionChanged += DisplayCategoryToUpdate;
+                CancelButton.Click += ResetAll;
             }
             else
             {
@@ -52,7 +52,15 @@ namespace FPCoderCafe.UserControls
                 DeleteCategoryButton.Click -= DeleteCategoryOnClick;
                 SelectImageButton.Click -= SelectFile;
                 CategoryDataGrid.SelectionChanged -= DisplayCategoryToUpdate;
+                CancelButton.Click -= ResetAll;
             }
+        }
+
+        private void ResetAll(object o, EventArgs e)
+        {
+            //Unselect data grid and clear the textbox
+            CategoryDataGrid.UnselectAll();
+            ClearTextBox();
         }
         private void SelectFile(object o, EventArgs e)
         {
@@ -78,11 +86,8 @@ namespace FPCoderCafe.UserControls
                 {
                     //Copy the image file to that destination
                     File.Copy(fileName, destination);
-                    //File.Copy(fileName, "/Images/" + System.IO.Path.GetFileName(fileName));
-
                 }
             }
-            
         }
 
         private void SetUpCategoryGrid()
@@ -109,17 +114,15 @@ namespace FPCoderCafe.UserControls
             CategoryDataGrid.Columns.Add(CategoryNameNoColumn);
             CategoryDataGrid.Columns.Add(DescriptionColumn);
             CategoryDataGrid.Columns.Add(ImageNamecolumn);
-
         }
         private void PopulateCategoryDataGrid()
         {
             CategoryDataGrid.Items.Clear();
-            using(var ctx = new PointOfSaleContext())
+            using (var ctx = new PointOfSaleContext())
             {
-                //Add data from database to Category datagrid
-                categoryList = ctx.Categories.ToList();
-                Category category = new Category();
-                foreach(Category c in categoryList)
+                //Add data from database to Category datagrid where isEnable is equals to true.
+                categoryList = ctx.Categories.Where(x => x.IsEnable).ToList();
+                foreach (Category c in categoryList)
                 {
                     CategoryDataGrid.Items.Add(c);
                 }
@@ -127,7 +130,6 @@ namespace FPCoderCafe.UserControls
         }
         private void SaveCategoryOnClick(Object s, EventArgs e)
         {
-
             if (CategoryTextBox.Text == "" || ImagePathTextBox.Text == "")
             {
                 MessageBox.Show("Please enter category name and select category image");
@@ -138,23 +140,25 @@ namespace FPCoderCafe.UserControls
                 newCategory.Name = CategoryTextBox.Text;
                 newCategory.Description = CategoryDescripTextBox.Text;
                 newCategory.ImageName = ImagePathTextBox.Text;
+
                 using (var ctx = new PointOfSaleContext())
                 {
-
+                    //Check if category name enter exist inside the database
+                    categoryList = ctx.Categories.Where(x => x.Name == newCategory.Name).ToList();
+                    foreach(Category c in categoryList)
+                    {
+                        if (newCategory.Name == c.Name)
+                        {
+                            MessageBox.Show("This category already add. Please enter another one");
+                            return;
+                        }   
+                    }
                     //add new category enter from the text box to database
                     ctx.Categories.Add(newCategory);
                     ctx.SaveChanges();
                 }
-                /* string csvFileName = Directory.GetCurrentDirectory() + @"..\..\..\Data\Category.csv";
-                 string nameDetails = newCategory.Name + ", " + newCategory.Description + ", " + newCategory.ImageName;
-                 if (!File.Exists(csvFileName))
-                     {
-                     using (sw = new StreamWriter(new FileStream(csvFileName, FileMode.Create, FileAccess.Write)))
-                     {
-                         string nameHeader = "Categpry name,Description,Image name\n"; //No point concatenating
-                     }
-                 } File.AppendAllText(csvFileName, nameDetails);*/
-                var filepath = @"\Category.csv\";
+
+                /*var filepath = "Category.csv";
                 if (!File.Exists(filepath))
                 {
                     using (sw = new StreamWriter(new FileStream(filepath, FileMode.Create, FileAccess.Write)))
@@ -168,8 +172,7 @@ namespace FPCoderCafe.UserControls
                     {
                         sw.Write(newCategory.Name + ", " + newCategory.Description + ", " + newCategory.ImageName);
                     }
-                }
-
+                }*/
                 PopulateCategoryDataGrid();
                 ClearTextBox();
             }
@@ -195,7 +198,6 @@ namespace FPCoderCafe.UserControls
             {
                 UpdateCategoryButton.IsEnabled = false; 
                 SaveCategoryButton.IsEnabled = true;
-
             }
         }
 
@@ -205,12 +207,15 @@ namespace FPCoderCafe.UserControls
             {
                 Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
                 int idToUpdate = selectedCategory.Id;
-                //Pull the repestive phone for the id we have
-                Category uc = (Category)ctx.Categories.Where(x => x.Id == idToUpdate).First();
+                //Pull the repestive category for the id we have
+                Category uc = ctx.Categories.Where(x => x.Id == idToUpdate).First();
                 if (CategoryTextBox.Text.Equals("") || CategoryDescripTextBox.Text.Equals(""))
                 {
+                    CategoryTextBox.Text = selectedCategory.Name;
+                    CategoryDescripTextBox.Text = selectedCategory.Description;
+                    ImagePathTextBox.Text = selectedCategory.ImageName;
                     MessageBox.Show("Please enter category name and description to update.");
-                    return;
+                    return; 
                 }
                  
                 //Reconstruct the object based on the form data
@@ -218,7 +223,6 @@ namespace FPCoderCafe.UserControls
                 uc.Description = CategoryDescripTextBox.Text;
                 uc.ImageName = ImagePathTextBox.Text;
               
-                   
                 //Update the object
                 ctx.Categories.Update(uc);
                 //Save changes
@@ -236,8 +240,9 @@ namespace FPCoderCafe.UserControls
                 Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
                 int idToUpdate = selectedCategory.Id;
                 //Pull the repestive phone for the id we have
-                Category uc = (Category)ctx.Categories.Where(x => x.Id == idToUpdate).First();
-                ctx.Categories.Remove(uc);
+                Category uc = ctx.Categories.Where(x => x.Id == idToUpdate).First();
+                uc.IsEnable = false;
+                ctx.Categories.Update(uc);
                 ctx.SaveChanges();
                 PopulateCategoryDataGrid();
             }
