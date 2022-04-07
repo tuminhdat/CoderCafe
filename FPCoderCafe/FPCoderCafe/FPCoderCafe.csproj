@@ -187,6 +187,10 @@
     <Compile Include="Migrations\20220407000923_AddIsEnableColumns.designer.cs">
       <DependentUpon>20220407000923_AddIsEnableColumns.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20220407044912_AddForeignkeyStrings.cs" />
+    <Compile Include="Migrations\20220407044912_AddForeignkeyStrings.designer.cs">
+      <DependentUpon>20220407044912_AddForeignkeyStrings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\PointOfSaleContextModelSnapshot.cs" />
     <Compile Include="UserControls\CategoryUserControl.xaml.cs">
       <DependentUpon>CategoryUserControl.xaml</DependentUpon>
