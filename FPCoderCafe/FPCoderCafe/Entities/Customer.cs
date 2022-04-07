@@ -15,7 +15,7 @@ namespace FPCoderCafe.Entities
         public bool IsEnable { get; set; }
         public Customer()
         {
-
+            IsEnable = true;
         }
     }
 }

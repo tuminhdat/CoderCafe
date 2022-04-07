@@ -16,13 +16,13 @@ namespace FPCoderCafe.Entities
         public List<Product> Products { get; set; }
         public string ImageName { get; set; }
 
-        public bool IsEnable{get; set;}
+        public bool IsEnable { get; set; }
         [NotMapped]
         //public string FullImagePath { get => @"\Images\" + ImageName; }
         public string FullImagePath { get => Directory.GetCurrentDirectory() + @"\Images\" + ImageName; }
         public Category()
         {
-
+            IsEnable = true;
         }
     }
 }
