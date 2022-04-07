@@ -61,6 +61,13 @@ namespace FPCoderCafe.UserControls
                 DebitButton.Click += DebitButtonClick;
                 CreditButton.Click += CreditButtonClick;
                 PaymentButton.Click += BackButtonOfPayment;
+                ItemDataGrid.SelectionChanged += EnableDeleteButton;
+                LoadSignUpButton.Click += LoadSignUpFormClick;
+                LoadSignInButton.Click += LoadLoginFormClick;
+                SignInBackButton.Click += BackButtonOfSignIn;
+                SignUpBackButton.Click += BackButtonOfSignUp;
+                SignUpButton.Click += SignUpButtonClick;
+                LoginButton.Click += LoginButtonClick;
             }
             else
             {
@@ -77,6 +84,13 @@ namespace FPCoderCafe.UserControls
                 DebitButton.Click -= DebitButtonClick;
                 CreditButton.Click -= CreditButtonClick;
                 PaymentButton.Click -= BackButtonOfPayment;
+                ItemDataGrid.SelectionChanged -= EnableDeleteButton;
+                LoadSignUpButton.Click -= LoadSignUpFormClick;
+                LoadSignInButton.Click -= LoadLoginFormClick;
+                SignInBackButton.Click -= BackButtonOfSignIn;
+                SignUpBackButton.Click -= BackButtonOfSignUp;
+                SignUpButton.Click -= SignUpButtonClick;
+                LoginButton.Click -= LoginButtonClick;
             }
         }
 
@@ -105,6 +119,18 @@ namespace FPCoderCafe.UserControls
             PaymentGrid.Visibility = Visibility.Collapsed;
 
             CategoryListBox.Visibility = Visibility.Visible;
+        }
+
+        private void BackButtonOfSignIn(object o, EventArgs e)
+        {
+            PaymentGrid.Visibility = Visibility.Visible;
+            SignInGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void BackButtonOfSignUp(object o, EventArgs e)
+        {
+            SignInGrid.Visibility = Visibility.Visible;
+            SignUpGrid.Visibility = Visibility.Collapsed;
         }
 
         private void ResetThirdGrid()
@@ -343,6 +369,7 @@ namespace FPCoderCafe.UserControls
             ItemDataGrid.Items.Remove(ItemDataGrid.SelectedItem);
             tempItems.Remove(selectedItem);
             TotalPrice.Text = "$" + tempItems.Select(x => x.TotalPrice).Sum();
+            DeleteButton.IsEnabled = false;
         }
 
         private void SmallButtonClick(object o, EventArgs e)
@@ -398,7 +425,105 @@ namespace FPCoderCafe.UserControls
             CreditButton.Background = Brushes.LightBlue;
         }
 
+        private void EnableDeleteButton(object o, EventArgs e)
+        {
+            if (PaymentGrid.Visibility == Visibility.Visible)
+            {
+                ItemDataGrid.UnselectAll();
+            } else
+            {
+                DeleteButton.IsEnabled = true;
+            }
+        }
 
+        private void LoadLoginFormClick(object o, EventArgs e)
+        {
+            PaymentGrid.Visibility = Visibility.Collapsed;
+            SignInGrid.Visibility = Visibility.Visible;
+        }
+
+        private void LoadSignUpFormClick(object o, EventArgs e)
+        {
+            SignInGrid.Visibility = Visibility.Collapsed;
+            SignUpGrid.Visibility = Visibility.Visible;
+        }
+
+        private void SignUpButtonClick(object o, EventArgs e)
+        {
+            string phone = SignUpPhoneTextBox.Text;
+            string pin = SignUpPinTextBox.Text;
+
+            if (phone == "" || !Regex.IsMatch(phone, @"^\d+$"))
+            {
+                MessageBox.Show("Please input your Phone number");
+                return;
+            }
+
+            if (pin == "" || pin.Length < 4)
+            {
+                MessageBox.Show("Please input your Pin number and it should at least 4 characters");
+                return;
+            }
+
+            using (var ctx = new PointOfSaleContext())
+            {
+                var checkExistPhone = ctx.Customers.Where(x => x.Phone.Equals(phone)).Count();
+
+                if (checkExistPhone == 0)
+                {
+                    Customer newCustomer = new Customer();
+                    newCustomer.Phone = phone;
+                    newCustomer.BarCode = pin;
+                    newCustomer.RedeemPoint = "0";
+
+                    ctx.Customers.Add(newCustomer);
+                    ctx.SaveChanges();
+
+                    SignUpPhoneTextBox.Text = "";
+                    SignUpPinTextBox.Text = "";
+
+                    SignInGrid.Visibility = Visibility.Visible;
+                    SignUpGrid.Visibility = Visibility.Collapsed;
+                } else
+                {
+                    MessageBox.Show("You already created account with this phone number");
+                    return;
+                }
+            } 
+        }
+
+        private void LoginButtonClick(object o, EventArgs e)
+        {
+            string phone = SignInPhoneTextBox.Text;
+            string pin = SignInPinTextBox.Text;
+
+            using (var ctx = new PointOfSaleContext())
+            {
+                var checkExistPhone = ctx.Customers.Where(x => x.Phone.Equals(phone) && x.BarCode.Equals(pin)).First();
+
+                if (checkExistPhone != null)
+                {
+                    UserPhoneNum.Content = checkExistPhone.Phone;
+                    UserPoint.Content = checkExistPhone.RedeemPoint;
+
+                    SignInPhoneTextBox.Text = "";
+                    SignInPinTextBox.Text = "";
+
+                    SignInGrid.Visibility = Visibility.Collapsed;
+                    PaymentGrid.Visibility = Visibility.Visible;
+                    LoadSignInButton.Visibility = Visibility.Collapsed;
+                    UserPhoneNum.Visibility = Visibility.Visible;
+                    UserPoint.Visibility = Visibility.Visible;
+                    PhoneLabel.Visibility = Visibility.Visible;
+                    PointLabel.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    MessageBox.Show("You are either enter wrong phone number or pin");
+                    return;
+                }
+            }
+        }
 
         public class TempItem
         {
