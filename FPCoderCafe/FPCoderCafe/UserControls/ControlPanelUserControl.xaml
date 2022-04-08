@@ -24,15 +24,19 @@
             <Label Grid.Row="0" Grid.Column="0" Content="Manager Pin Code:" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="0" Grid.Column="1" Name="ManagerPinCode" Width="200" HorizontalAlignment="Left" Margin="5"/>
         </Grid>
-        <Grid x:Name="UpdateUserInfoGrid" Height="282" Margin="100,0,112,0">
-            <Label x:Name="CustomerPhone" Content="Phone " HorizontalAlignment="Left" Margin="306,41,0,0" VerticalAlignment="Top"  Width="108" Background="White" FontSize="14" Height="29"/>
-            <Label x:Name="CustomerRedeemPoint" Content="Redeem point " HorizontalAlignment="Left" Margin="306,89,0,0" VerticalAlignment="Top"  Width="108" Background="White" FontSize="14" Height="32"/>
+        <Grid x:Name="UpdateUserInfoGrid" Height="285" Margin="100,0,86,0">
+            <Label x:Name="CustomerPhone" Content="Phone " HorizontalAlignment="Left" Margin="279,41,0,0" VerticalAlignment="Top"  Width="108" Background="White" FontSize="14" Height="29"/>
+            <Label x:Name="CustomerRedeemPoint" Content="Redeem point " HorizontalAlignment="Left" Margin="279,89,0,0" VerticalAlignment="Top"  Width="108" Background="White" FontSize="14" Height="32"/>
             <Label x:Name="UpdateUserTitle" Content="Update User Information" HorizontalAlignment="Left" Margin="203,0,0,0" VerticalAlignment="Top"  Width="238" FontSize="20" Height="41"/>
             <TextBox x:Name="CustomerPhoneText" HorizontalAlignment="Left" Height="29" Margin="438,42,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
             <TextBox x:Name="RedeemPointText" HorizontalAlignment="Left" Height="29" Margin="438,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <DataGrid x:Name="CustomerInfoDataGrid" HorizontalAlignment="Left" Height="220" Margin="10,41,0,0" VerticalAlignment="Top" Width="250"/>
-            <Button x:Name="DeleteUserButton" Content="Delete" HorizontalAlignment="Left" Margin="339,160,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.64,-0.15"/>
-            <Button x:Name="UpdateUserButton" Content="Update" HorizontalAlignment="Left" Margin="470,160,0,0" VerticalAlignment="Top" Width="75"/>
+            <Button x:Name="DeleteUserButton" Content="Delete" HorizontalAlignment="Left" Margin="499,210,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.64,-0.15"/>
+            <Button x:Name="UpdateUserButton" Content="Update" HorizontalAlignment="Left" Margin="398,210,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.552,1.845"/>
+            <TextBlock x:Name="PointAdded" Text="{Binding ElementName=PointSlider, Path=Value}" FontSize="20"  Margin="398,161,115,96" RenderTransformOrigin="0.712,0.464" />
+            <Slider x:Name="PointSlider" Background="Black" Maximum="100" Cursor="Hand" IsSnapToTickEnabled="True" IsMoveToPointEnabled ="True" HorizontalAlignment="Left" Margin="398,139,0,0" VerticalAlignment="Top" Height="17" Width="206" SmallChange="1" LargeChange="10" TickFrequency="10" TickPlacement="TopLeft" RenderTransformOrigin="0.829,0.533"/>
+            <Label x:Name="AddPoint" Content="Add points " HorizontalAlignment="Left" Margin="279,139,0,0" VerticalAlignment="Top"  Width="108" Background="White" FontSize="14" Height="32" />
+            <Button x:Name="ResetPointButton" Content="Reset Point" HorizontalAlignment="Left" Margin="291,210,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.552,1.845"/>
         </Grid>
     </StackPanel>
 </UserControl>

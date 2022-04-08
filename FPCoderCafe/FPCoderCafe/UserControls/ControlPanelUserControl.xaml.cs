@@ -45,15 +45,22 @@ namespace FPCoderCafe.UserControls
                 SaveButton.Click += SaveSettingEventHandler;
                 SwitchModeButton.Click += SwitchModeEventHandler;
                 CustomerInfoDataGrid.SelectionChanged += DisplayUserInfo;
+                UpdateUserButton.Click += UpdateCustomerInfo;
+                DeleteUserButton.Click += DeleteUser;
+                ResetPointButton.Click += ResetPoint;
             }
             else
             {
                 SaveButton.Click -= SaveSettingEventHandler;
                 SwitchModeButton.Click -= SwitchModeEventHandler;
+                CustomerInfoDataGrid.SelectionChanged -= DisplayUserInfo;
+                UpdateUserButton.Click -= UpdateCustomerInfo;
+                DeleteUserButton.Click -= DeleteUser;
+                ResetPointButton.Click += ResetPoint;
             }
         }
 
-        public void SaveSettingEventHandler(object o, EventArgs args) 
+        public void SaveSettingEventHandler(object o, EventArgs args)
         {
             //Validate input
             string ErrorMessage = string.Empty;
@@ -64,7 +71,7 @@ namespace FPCoderCafe.UserControls
             }
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
-                MessageBox.Show(ErrorMessage,"Could not save settings");
+                MessageBox.Show(ErrorMessage, "Could not save settings");
                 return;
             }
             //Save settings to app config
@@ -95,10 +102,10 @@ namespace FPCoderCafe.UserControls
         private void PopulateUserInfoDataGrid()
         {
             CustomerInfoDataGrid.Items.Clear();
-            using(var ctx = new PointOfSaleContext())
+            using (var ctx = new PointOfSaleContext())
             {
                 customerList = ctx.Customers.Where(x => x.IsEnable).ToList();
-                foreach(Customer c in customerList)
+                foreach (Customer c in customerList)
                 {
                     CustomerInfoDataGrid.Items.Add(c);
                 }
@@ -106,9 +113,98 @@ namespace FPCoderCafe.UserControls
         }
         private void DisplayUserInfo(object o, EventArgs e)
         {
-            Customer customer = (Customer)CustomerInfoDataGrid.SelectedItem;
-            CustomerPhoneText.Text = customer.Phone;
-            RedeemPointText.Text = customer.RedeemPoint;
+            if (CustomerInfoDataGrid.SelectedItem != null)
+            {
+                //Get the selected customer
+                Customer customer = (Customer)CustomerInfoDataGrid.SelectedItem;
+                //Display customer's phone and redeem points
+                CustomerPhoneText.Text = customer.Phone;
+                RedeemPointText.Text = customer.RedeemPoint;
+            }
+        }
+
+        private void ResetPoint(object o, EventArgs e)
+        {
+            using (var ctx = new PointOfSaleContext())
+            {
+                //Check if customer is selected
+                if (CustomerInfoDataGrid.SelectedItem != null)
+                {
+                    //Get id from selected customer
+                    Customer selectedCustomer = (Customer)CustomerInfoDataGrid.SelectedItem;
+                    int idToUpdated = selectedCustomer.Id;
+
+                    //Pull the repestive customer information for the id we have
+                    Customer uc = ctx.Customers.Where(x => x.Id == idToUpdated).First();
+                    //Reset the redeem point to 0
+                    uc.RedeemPoint = "0";
+                    uc.Phone = CustomerPhoneText.Text;
+                    //Update customer information to database
+                    ctx.Customers.Update(uc);
+                    ctx.SaveChanges();
+                    //Update datagrid
+                    PopulateUserInfoDataGrid();
+                }
+                else
+                    MessageBox.Show("No customer available to reset point!");
+                //Clear all the value dislay on text box and set value of slider to 0 
+                resetAll();
+            }
+        }
+
+        private void UpdateCustomerInfo(object o, EventArgs e)
+        {
+            using (var ctx = new PointOfSaleContext())
+            {
+                if (CustomerInfoDataGrid.SelectedItem != null)
+                {
+                    //Get the original point and added point from the text box 
+                    int addedPoint = Convert.ToInt32(PointAdded.Text);
+                    int originalPoint = Convert.ToInt32(RedeemPointText.Text);
+                    int newPoint = addedPoint + originalPoint;
+
+                    Customer selectedCustomer = (Customer)CustomerInfoDataGrid.SelectedItem;
+                    int idToUpdated = selectedCustomer.Id;
+                    Customer uc = ctx.Customers.Where(x => x.Id == idToUpdated).First();
+                    uc.RedeemPoint = newPoint.ToString();
+                    uc.Phone = CustomerPhoneText.Text;
+
+                    ctx.Customers.Update(uc);
+                    ctx.SaveChanges();
+                    PopulateUserInfoDataGrid();
+                    MessageBox.Show("You added " + addedPoint + " points.");
+                }else
+                    MessageBox.Show("No customer to update!");
+                resetAll();
+            }
+        }
+
+        private void DeleteUser(Object o, EventArgs e)
+        {
+            using (var ctx = new PointOfSaleContext())
+            {
+                if (CustomerInfoDataGrid.SelectedItem != null)
+                {
+                    Customer selectedCustomer = (Customer)CustomerInfoDataGrid.SelectedItem;
+                    int idToUpdated = selectedCustomer.Id;
+
+                    Customer uc = ctx.Customers.Where(x => x.Id == idToUpdated).First();
+                    //Remove customer from the data grid by set the Isnable to false
+                    uc.IsEnable = false;
+                    ctx.Customers.Update(uc);
+                    ctx.SaveChanges();
+                    PopulateUserInfoDataGrid();
+                }else
+                    MessageBox.Show("No customer to delete!");
+                resetAll();
+            }
+        }
+
+        private void resetAll()
+        {
+            CustomerPhoneText.Text = "";
+            RedeemPointText.Text = "";
+            PointSlider.Value = 0;
         }
     }
 }

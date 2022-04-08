@@ -144,7 +144,7 @@ namespace FPCoderCafe.UserControls
                 using (var ctx = new PointOfSaleContext())
                 {
                     //Check if category name enter exist inside the database
-                    categoryList = ctx.Categories.Where(x => x.Name == newCategory.Name).ToList();
+                    categoryList = ctx.Categories.Where(x => x.Name == newCategory.Name && x.IsEnable).ToList();
                     foreach(Category c in categoryList)
                     {
                         if (newCategory.Name == c.Name)
@@ -190,7 +190,14 @@ namespace FPCoderCafe.UserControls
                 CategoryDescripTextBox.Text = selectedCategory.Description;
                 ImagePathTextBox.Text = selectedCategory.ImageName;
                 string des = Directory.GetCurrentDirectory() + @"\Images\" + selectedCategory.ImageName;
-                CategoryImage.Source = new BitmapImage(new Uri(des));
+                try
+                {
+                    CategoryImage.Source = new BitmapImage(new Uri(des));
+                }
+                catch
+                {
+                    CategoryImage.Source = null;
+                }
                 UpdateCategoryButton.IsEnabled = true;
                 SaveCategoryButton.IsEnabled = false;
             }
@@ -205,30 +212,35 @@ namespace FPCoderCafe.UserControls
         {
             using(var ctx = new PointOfSaleContext())
             {
-                Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
-                int idToUpdate = selectedCategory.Id;
-                //Pull the repestive category for the id we have
-                Category uc = ctx.Categories.Where(x => x.Id == idToUpdate).First();
-                if (CategoryTextBox.Text.Equals("") || CategoryDescripTextBox.Text.Equals(""))
+                if (CategoryDataGrid.SelectedItem != null)
                 {
-                    CategoryTextBox.Text = selectedCategory.Name;
-                    CategoryDescripTextBox.Text = selectedCategory.Description;
-                    ImagePathTextBox.Text = selectedCategory.ImageName;
-                    MessageBox.Show("Please enter category name and description to update.");
-                    return; 
+                    Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
+                    int idToUpdate = selectedCategory.Id;
+                    //Pull the repestive category for the id we have
+                    Category uc = ctx.Categories.Where(x => x.Id == idToUpdate).First();
+                    if (CategoryTextBox.Text.Equals("") || CategoryDescripTextBox.Text.Equals(""))
+                    {
+                        CategoryTextBox.Text = selectedCategory.Name;
+                        CategoryDescripTextBox.Text = selectedCategory.Description;
+                        ImagePathTextBox.Text = selectedCategory.ImageName;
+                        MessageBox.Show("Please enter category name and description to update.");
+                        return;
+                    }
+
+                    //Reconstruct the object based on the form data
+                    uc.Name = CategoryTextBox.Text;
+                    uc.Description = CategoryDescripTextBox.Text;
+                    uc.ImageName = ImagePathTextBox.Text;
+
+                    //Update the object
+                    ctx.Categories.Update(uc);
+                    //Save changes
+                    ctx.SaveChanges();
+                    //Update datagrid
+                    PopulateCategoryDataGrid();
                 }
-                 
-                //Reconstruct the object based on the form data
-                uc.Name = CategoryTextBox.Text;
-                uc.Description = CategoryDescripTextBox.Text;
-                uc.ImageName = ImagePathTextBox.Text;
-              
-                //Update the object
-                ctx.Categories.Update(uc);
-                //Save changes
-                ctx.SaveChanges();
-                //Update datagrid
-                PopulateCategoryDataGrid();
+                else
+                    MessageBox.Show("No category to update!");
             }
             //Clear the textbox after clicking update button
             ClearTextBox();
@@ -237,14 +249,19 @@ namespace FPCoderCafe.UserControls
         {
             using(var ctx = new PointOfSaleContext())
             {
-                Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
-                int idToUpdate = selectedCategory.Id;
-                //Pull the repestive phone for the id we have
-                Category uc = ctx.Categories.Where(x => x.Id == idToUpdate).First();
-                uc.IsEnable = false;
-                ctx.Categories.Update(uc);
-                ctx.SaveChanges();
-                PopulateCategoryDataGrid();
+                if (CategoryDataGrid.SelectedItem != null)
+                {
+                    Category selectedCategory = (Category)CategoryDataGrid.SelectedItem;
+                    int idToUpdate = selectedCategory.Id;
+                    //Pull the repestive phone for the id we have
+                    Category uc = ctx.Categories.Where(x => x.Id == idToUpdate).First();
+                    uc.IsEnable = false;
+                    ctx.Categories.Update(uc);
+                    ctx.SaveChanges();
+                    PopulateCategoryDataGrid();
+                }
+                else
+                    MessageBox.Show("No category to delete!");
             }
             ClearTextBox();
         }
