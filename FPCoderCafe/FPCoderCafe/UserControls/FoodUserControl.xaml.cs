@@ -228,7 +228,7 @@ namespace FPCoderCafe.UserControls
             //Show image file selection dialog
             OpenFileDialog openFileDialogue = new OpenFileDialog();
             openFileDialogue.InitialDirectory = "c:\\temp";
-            openFileDialogue.Filter = "PNG Files (*.png)|*.png";
+            openFileDialogue.Filter = "Images (*.png,*.jpg)|*.png;*.jpg";
             openFileDialogue.RestoreDirectory = true;
 
             var result = openFileDialogue.ShowDialog();
