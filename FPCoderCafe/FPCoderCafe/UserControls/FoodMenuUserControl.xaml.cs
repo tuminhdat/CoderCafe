@@ -37,6 +37,7 @@ namespace FPCoderCafe.UserControls
             SignInGrid.Visibility = Visibility.Collapsed;
             SignUpGrid.Visibility = Visibility.Collapsed;
             PaymentGrid.Visibility = Visibility.Collapsed;
+            PointGrid.Visibility = Visibility.Collapsed;
 
             InitializeCategoryListBox();
             initializeDataGrid();
@@ -68,6 +69,7 @@ namespace FPCoderCafe.UserControls
                 SignUpBackButton.Click += BackButtonOfSignUp;
                 SignUpButton.Click += SignUpButtonClick;
                 LoginButton.Click += LoginButtonClick;
+                CashButton.Click += CashButtonClick;
             }
             else
             {
@@ -91,6 +93,7 @@ namespace FPCoderCafe.UserControls
                 SignUpBackButton.Click -= BackButtonOfSignUp;
                 SignUpButton.Click -= SignUpButtonClick;
                 LoginButton.Click -= LoginButtonClick;
+                CashButton.Click -= CashButtonClick;
             }
         }
 
@@ -116,6 +119,8 @@ namespace FPCoderCafe.UserControls
 
         private void BackButtonOfPayment(object o, EventArgs e)
         {
+            MakePayButton.IsEnabled = true;
+
             PaymentGrid.Visibility = Visibility.Collapsed;
 
             CategoryListBox.Visibility = Visibility.Visible;
@@ -129,6 +134,8 @@ namespace FPCoderCafe.UserControls
 
         private void BackButtonOfSignUp(object o, EventArgs e)
         {
+            SignInPhoneTextBox.Text = "";
+            SignInPinTextBox.Password = "";
             SignInGrid.Visibility = Visibility.Visible;
             SignUpGrid.Visibility = Visibility.Collapsed;
         }
@@ -344,6 +351,14 @@ namespace FPCoderCafe.UserControls
                 return;
             }
 
+            if (LoadSignInButton.Visibility == Visibility.Collapsed)
+            {
+                PointButton.IsEnabled = true;
+            } else
+            {
+                PointButton.IsEnabled = false;
+            }
+
             MakePayButton.IsEnabled = false;
             DeleteButton.IsEnabled = false;
             ResetThirdGrid();
@@ -417,12 +432,21 @@ namespace FPCoderCafe.UserControls
         {
             DebitButton.Background = Brushes.LightBlue;
             CreditButton.Background = Brushes.LightGray;
+            CashButton.Background = Brushes.LightGray;
         }
 
         private void CreditButtonClick(object o, EventArgs e)
         {
             DebitButton.Background = Brushes.LightGray;
             CreditButton.Background = Brushes.LightBlue;
+            CashButton.Background = Brushes.LightGray;
+        }
+
+        private void CashButtonClick(object o, EventArgs e)
+        {
+            CashButton.Background = Brushes.LightBlue;
+            DebitButton.Background = Brushes.LightGray;
+            CreditButton.Background = Brushes.LightGray;
         }
 
         private void EnableDeleteButton(object o, EventArgs e)
@@ -438,12 +462,16 @@ namespace FPCoderCafe.UserControls
 
         private void LoadLoginFormClick(object o, EventArgs e)
         {
+            SignInPhoneTextBox.Text = "";
+            SignInPinTextBox.Password = "";
             PaymentGrid.Visibility = Visibility.Collapsed;
             SignInGrid.Visibility = Visibility.Visible;
         }
 
         private void LoadSignUpFormClick(object o, EventArgs e)
         {
+            SignUpPhoneTextBox.Text = "";
+            SignUpPinTextBox.Password = "";
             SignInGrid.Visibility = Visibility.Collapsed;
             SignUpGrid.Visibility = Visibility.Visible;
         }
@@ -451,7 +479,7 @@ namespace FPCoderCafe.UserControls
         private void SignUpButtonClick(object o, EventArgs e)
         {
             string phone = SignUpPhoneTextBox.Text;
-            string pin = SignUpPinTextBox.Text;
+            string pin = SignUpPinTextBox.Password.ToString();
 
             if (phone == "" || !Regex.IsMatch(phone, @"^\d+$"))
             {
@@ -480,7 +508,7 @@ namespace FPCoderCafe.UserControls
                     ctx.SaveChanges();
 
                     SignUpPhoneTextBox.Text = "";
-                    SignUpPinTextBox.Text = "";
+                    SignUpPinTextBox.Password = "";
 
                     SignInGrid.Visibility = Visibility.Visible;
                     SignUpGrid.Visibility = Visibility.Collapsed;
@@ -495,7 +523,7 @@ namespace FPCoderCafe.UserControls
         private void LoginButtonClick(object o, EventArgs e)
         {
             string phone = SignInPhoneTextBox.Text;
-            string pin = SignInPinTextBox.Text;
+            string pin = SignInPinTextBox.Password.ToString();
 
             using (var ctx = new PointOfSaleContext())
             {
@@ -507,8 +535,9 @@ namespace FPCoderCafe.UserControls
                     UserPoint.Content = checkExistPhone.RedeemPoint;
 
                     SignInPhoneTextBox.Text = "";
-                    SignInPinTextBox.Text = "";
+                    SignInPinTextBox.Password = "";
 
+                    PointButton.IsEnabled = true;
                     SignInGrid.Visibility = Visibility.Collapsed;
                     PaymentGrid.Visibility = Visibility.Visible;
                     LoadSignInButton.Visibility = Visibility.Collapsed;
@@ -523,6 +552,25 @@ namespace FPCoderCafe.UserControls
                     return;
                 }
             }
+        }
+
+        private void SavingPointClick(object o, EventArgs e)
+        {
+            Customer getCustomer;
+
+            using (var ctx = new PointOfSaleContext())
+            {
+                getCustomer = (Customer)ctx.Customers.Where(x => x.Phone == UserPhoneNum.Content.ToString()).First();
+            }
+
+            double currentUserPoint = double.Parse(getCustomer.RedeemPoint);
+            double currentTotalPay = Double.Parse(TotalPrice.Text);
+            double currentSavingAmount = currentUserPoint / 10.0;
+            
+
+
+            PointGrid.Visibility = Visibility.Visible;
+
         }
 
         public class TempItem
