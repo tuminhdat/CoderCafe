@@ -207,6 +207,9 @@
     <Compile Include="UserControls\ManagerUserControl.xaml.cs">
       <DependentUpon>ManagerUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\SaleReportUserControl.xaml.cs">
+      <DependentUpon>SaleReportUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\PointOfSaleContext.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -237,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ManagerUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SaleReportUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -11,7 +11,6 @@
             <Button Name="SaveButton" Content="Save Settings" Width="200" Margin="5"/>
             <Button Name="ReloadButton" Content="Reload Settings" Width="200" Margin="5"/>
             <Button Name="SwitchModeButton" Content="Switch to User Mode" Width="200" Margin="5"/>
-            <Button Name="SaleReportButton" Content="Sale Report" Width="180" Margin="5"/>
         </StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
