@@ -66,7 +66,7 @@ namespace FPCoderCafe.UserControls
         {
             OpenFileDialog openFileDialogue = new OpenFileDialog();
             openFileDialogue.InitialDirectory = "c:\\temp";
-            openFileDialogue.Filter = "PNG Files (*.png)|*.png";
+            openFileDialogue.Filter = "Images (*.png,*.jpg)|*.png;*.jpg";
             openFileDialogue.RestoreDirectory = true;
 
             Nullable<bool> result = openFileDialogue.ShowDialog();
