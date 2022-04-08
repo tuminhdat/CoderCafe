@@ -6,5 +6,16 @@
         xmlns:local="clr-namespace:FPCoderCafe"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000">
+    <Window.Resources>
+        <ResourceDictionary>
+            <RoutedUICommand x:Key="EscCommand" Text="Esc Command"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{StaticResource EscCommand}"/>
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource EscCommand}" Executed="EscCommandEventHandler"/>
+    </Window.CommandBindings>
     <Frame Name="MainFrame" NavigationUIVisibility="Hidden"/>
 </Window>

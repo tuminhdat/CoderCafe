@@ -21,11 +21,20 @@ namespace FPCoderCafe
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Singleton pattern to get MainWindow ob
         private static MainWindow mainWindow;
+
+        private FoodMenuUserControl foodMenuUserControl = new FoodMenuUserControl();
+        private ManagerUserControl managerUserControl = new ManagerUserControl();
+
+        public event EventHandler CanExecuteChanged;
+
         public static MainWindow GetMainWindow()
         {
             return mainWindow;
         }
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,6 +48,26 @@ namespace FPCoderCafe
             {
                 MainFrame.Content = new ManagerUserControl();
             }
+        }
+
+        public void SwitchToFoodMenu()
+        {
+            MessageBoxButton buttons = MessageBoxButton.YesNo;
+            var result = MessageBox.Show(
+                "To switch back to manager mode:\n press [ESC] and enter the manager pincode ",
+                "Do you want to switch to user mode?",
+                buttons);
+            if(result == MessageBoxResult.Yes) MainFrame.Content = foodMenuUserControl;
+        }
+
+        public void EscCommandEventHandler(Object sender, ExecutedRoutedEventArgs e)
+        {
+            //Only execute if user is in FoodMenu
+            if (MainFrame.Content != foodMenuUserControl) return;
+            var pinCodeWindow = new PinCodeWindow();
+            pinCodeWindow.Owner = this;
+            var result = pinCodeWindow.ShowDialog();
+            if(result == true) MainFrame.Content = managerUserControl;
         }
     }
 }

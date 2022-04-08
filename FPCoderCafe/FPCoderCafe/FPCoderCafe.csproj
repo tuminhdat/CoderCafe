@@ -192,6 +192,9 @@
       <DependentUpon>20220407044912_AddForeignkeyStrings.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\PointOfSaleContextModelSnapshot.cs" />
+    <Compile Include="PinCodeWindow.xaml.cs">
+      <DependentUpon>PinCodeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CategoryUserControl.xaml.cs">
       <DependentUpon>CategoryUserControl.xaml</DependentUpon>
     </Compile>
@@ -223,6 +226,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PinCodeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\CategoryUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -43,6 +43,7 @@ namespace FPCoderCafe.UserControls
             if (toggle)
             {
                 SaveButton.Click += SaveSettingEventHandler;
+                ReloadButton.Click += LoadSettingsEventHandler;
                 SwitchModeButton.Click += SwitchModeEventHandler;
                 CustomerInfoDataGrid.SelectionChanged += DisplayUserInfo;
                 UpdateUserButton.Click += UpdateCustomerInfo;
@@ -52,6 +53,7 @@ namespace FPCoderCafe.UserControls
             else
             {
                 SaveButton.Click -= SaveSettingEventHandler;
+                ReloadButton.Click -= LoadSettingsEventHandler;
                 SwitchModeButton.Click -= SwitchModeEventHandler;
                 CustomerInfoDataGrid.SelectionChanged -= DisplayUserInfo;
                 UpdateUserButton.Click -= UpdateCustomerInfo;
@@ -77,11 +79,17 @@ namespace FPCoderCafe.UserControls
             //Save settings to app config
             Default.ManagerPinCode = pinCode;
             Default.Save();
+            MessageBox.Show("Config saved to setting!");
+        }
+        public void LoadSettingsEventHandler(object o, EventArgs args)
+        {
+            LoadSettings();
+            MessageBox.Show("Config reloaded from setting!");
         }
 
         public void SwitchModeEventHandler(object o, EventArgs args)
         {
-            MainWindow.GetMainWindow().MainFrame.Content = new FoodMenuUserControl();
+            MainWindow.GetMainWindow().SwitchToFoodMenu();
         }
 
         private void InititializeUserInfoDataGrid()

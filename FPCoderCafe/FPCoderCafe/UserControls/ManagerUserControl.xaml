@@ -13,11 +13,11 @@
         <TabItem Header="Manage Category" Width="200">
             <local:CategoryUserControl/>
         </TabItem>
-        <TabItem Header="Control Panel" Width="200">
-            <local:ControlPanelUserControl/>
-        </TabItem>
         <TabItem Header="Sale Report" Width="180">
             <local:SaleReportUserControl/>
+        </TabItem>
+        <TabItem Header="Control Panel" Width="200">
+            <local:ControlPanelUserControl/>
         </TabItem>
     </TabControl>
 </UserControl>
