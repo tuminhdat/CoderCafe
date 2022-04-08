@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace FPCoderCafe.Entities
         public string ImageName { get; set; }
         public bool IsEnabled { get; set; }
         [NotMapped]
-        public string FullImagePath { get => "/Images/" + ImageName; }
+        public string FullImagePath { get => Directory.GetCurrentDirectory() + @"\Images\" + ImageName; }
         public Product()
         {
             IsEnabled = true;

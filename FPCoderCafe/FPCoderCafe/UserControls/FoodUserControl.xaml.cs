@@ -277,7 +277,7 @@ namespace FPCoderCafe.UserControls
                 ImagePathTextBox.Text = product.ImageName;
                 try
                 {
-                    FoodImage.Source = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + product.FullImagePath));
+                    FoodImage.Source = new BitmapImage(new Uri(product.FullImagePath));
                 }
                 catch (Exception)
                 {
