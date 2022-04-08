@@ -23,9 +23,7 @@ namespace FPCoderCafe.UserControls
     public partial class SaleReportUserControl : UserControl
     {
 
-        List<Category> categoryList = new List<Category>();
-        List<Product> productList = new List<Product>();
-        List<Item> itemList = new List<Item>();
+        List<Order> orderList = new List<Order>();
         public SaleReportUserControl()
         {
             ToggleEventHandler(false);
@@ -49,40 +47,31 @@ namespace FPCoderCafe.UserControls
 
         private void initializeDataGrid()
         {
-            DataGridTextColumn CategoryColumn = new DataGridTextColumn();
-            CategoryColumn.Header = "Category";
-            CategoryColumn.Binding = new Binding("Category.CategoryName");
+            DataGridTextColumn IdColumn = new DataGridTextColumn();
+            IdColumn.Header = "Id";
+            IdColumn.Binding = new Binding("Order.Id");
 
-            DataGridTextColumn NamegoryColumn = new DataGridTextColumn();
-            NamegoryColumn.Header = "Name";
-            NamegoryColumn.Binding = new Binding("Product.ProductName");
+            DataGridTextColumn OrderNumberColumn = new DataGridTextColumn();
+            OrderNumberColumn.Header = "Order Number";
+            OrderNumberColumn.Binding = new Binding("Order.OrderNumber");
 
-            DataGridTextColumn QuantityColumn = new DataGridTextColumn();
-            QuantityColumn.Header = "Quantity";
-            QuantityColumn.Binding = new Binding("Item.ItemQuantity");
+            DataGridTextColumn TotalAmountColumn = new DataGridTextColumn();
+            TotalAmountColumn.Header = "Total Amount";
+            TotalAmountColumn.Binding = new Binding("Order.TotalAmt");
 
-            DataGridTextColumn UnitPriceColumn = new DataGridTextColumn();
-            UnitPriceColumn.Header = "Category";
-            UnitPriceColumn.Binding = new Binding("Item.ItemPrice");
-
-            DataGridTextColumn SalesColumn = new DataGridTextColumn();
-            SalesColumn.Header = "Sales";
-            SalesColumn.Binding = new Binding("Item.Sales");
-
-            SaleReportDataGrid.Columns.Add(CategoryColumn);
-            SaleReportDataGrid.Columns.Add(NamegoryColumn);
-            SaleReportDataGrid.Columns.Add(QuantityColumn);
-            SaleReportDataGrid.Columns.Add(UnitPriceColumn);
-            SaleReportDataGrid.Columns.Add(SalesColumn);
+            OrderDatagrid.Columns.Add(IdColumn);
+            OrderDatagrid.Columns.Add(OrderNumberColumn);
+            OrderDatagrid.Columns.Add(TotalAmountColumn);
         }
         private void populatedatagrid()
         {
             using (var ctx = new PointOfSaleContext())
             {
-                categoryList = ctx.Categories.ToList();
+                orderList = ctx.Orders.ToList();
                 
-                foreach(Category c in categoryList)
+                foreach(Order order in orderList)
                 {
+                    OrderDatagrid.Items.Add(order);
                 }
             }
         }

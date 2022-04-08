@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +16,25 @@ namespace FPCoderCafe.Entities
         public string Note { get; set; }
         public Product Product { get; set; }
         public decimal TaxAmount { get; set; }
+       /* [NotMapped]
+        public int ItemQuantity { get => Quantity; }
+        [NotMapped]
+        public decimal ItemPrice { get => Amount; }*/
+        [NotMapped]
+        public decimal Sales
+        {
+            get
+            {
+                decimal sale = Quantity * Amount;
+                return sale;
+            }
+        }
         public Item()
         {
 
         }
+
+        
 
         public enum Size
         {
