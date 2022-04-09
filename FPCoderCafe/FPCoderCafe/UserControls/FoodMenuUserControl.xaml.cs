@@ -235,7 +235,7 @@ namespace FPCoderCafe.UserControls
 
                     PlaceProductId.Text = getProductItem.Id.ToString();
                     ProductNameText.Content = getProductItem.Name;
-                    //ItemImage.Source = new BitmapImage(new Uri(getProductItem.FullImagePath));
+                    ItemImage.Source = new BitmapImage(new Uri(getProductItem.FullImagePath));
                 }
             }
 
