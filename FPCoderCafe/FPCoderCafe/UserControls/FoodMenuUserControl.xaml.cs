@@ -463,6 +463,22 @@ namespace FPCoderCafe.UserControls
             CashButton.Background = Brushes.LightBlue;
             DebitButton.Background = Brushes.LightGray;
             CreditButton.Background = Brushes.LightGray;
+
+            //Calculate total amount
+            var totalAmount = 45.02m;
+
+            //Create and show cash tethering window dialog
+            var cashDialog = new CashWindow(totalAmount);
+            cashDialog.Owner = Window.GetWindow(this);
+            var result = cashDialog.ShowDialog();
+
+            //Handle dialog result
+            if (result == true)
+            {
+                var cashAmount = cashDialog.TetheredAmount;
+                var refundAmount = cashDialog.RefundAmount;
+                MessageBox.Show($"Inserted cash: {cashAmount}\nRefund amount: {refundAmount}");
+            }
         }
 
         private void EnableDeleteButton(object o, EventArgs e)

@@ -47,7 +47,7 @@ namespace FPCoderCafe
             if(result == MessageBoxResult.Yes) MainFrame.Content = foodMenuUserControl;
         }
 
-        public void EscCommandEventHandler(Object sender, ExecutedRoutedEventArgs e)
+        public void EscCommandEventHandler(object sender, ExecutedRoutedEventArgs e)
         {
             //Only execute if user is in FoodMenu
             if (MainFrame.Content != foodMenuUserControl) return;

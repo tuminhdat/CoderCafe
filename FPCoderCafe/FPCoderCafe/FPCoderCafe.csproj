@@ -173,6 +173,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CashWindow.xaml.cs">
+      <DependentUpon>CashWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Item.cs" />
@@ -214,6 +217,10 @@
       <DependentUpon>SaleReportUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\PointOfSaleContext.cs" />
+    <Page Include="CashWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
