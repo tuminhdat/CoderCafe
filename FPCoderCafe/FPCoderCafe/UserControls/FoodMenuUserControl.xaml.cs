@@ -26,6 +26,10 @@ namespace FPCoderCafe.UserControls
     {
         private List<TempItem> tempItems = new List<TempItem>();
 
+        private bool checkPointClick = false;
+
+        private double currentAmountPay = 0;
+
         public FoodMenuUserControl()
         {
             InitializeComponent();
@@ -70,6 +74,8 @@ namespace FPCoderCafe.UserControls
                 SignUpButton.Click += SignUpButtonClick;
                 LoginButton.Click += LoginButtonClick;
                 CashButton.Click += CashButtonClick;
+                CancelButton.Click += CancelButtonClick;
+                PointButton.Click += SavingPointClick;
             }
             else
             {
@@ -94,6 +100,8 @@ namespace FPCoderCafe.UserControls
                 SignUpButton.Click -= SignUpButtonClick;
                 LoginButton.Click -= LoginButtonClick;
                 CashButton.Click -= CashButtonClick;
+                CancelButton.Click -= CancelButtonClick;
+                PointButton.Click -= SavingPointClick;
             }
         }
 
@@ -122,6 +130,8 @@ namespace FPCoderCafe.UserControls
             MakePayButton.IsEnabled = true;
 
             PaymentGrid.Visibility = Visibility.Collapsed;
+
+            PointGrid.Visibility = Visibility.Collapsed;
 
             CategoryListBox.Visibility = Visibility.Visible;
         }
@@ -225,7 +235,7 @@ namespace FPCoderCafe.UserControls
 
                     PlaceProductId.Text = getProductItem.Id.ToString();
                     ProductNameText.Content = getProductItem.Name;
-                    ItemImage.Source = new BitmapImage(new Uri(getProductItem.FullImagePath));
+                    //ItemImage.Source = new BitmapImage(new Uri(getProductItem.FullImagePath));
                 }
             }
 
@@ -359,6 +369,11 @@ namespace FPCoderCafe.UserControls
                 PointButton.IsEnabled = false;
             }
 
+            if (PointButton.Background == Brushes.LightBlue && PointButton.IsEnabled == true)
+            {
+                DoCalculatePoint();
+            }
+
             MakePayButton.IsEnabled = false;
             DeleteButton.IsEnabled = false;
             ResetThirdGrid();
@@ -376,6 +391,7 @@ namespace FPCoderCafe.UserControls
             BeforeTaxTextBox.Text = "$" + Math.Round(beforeTax, 2).ToString();
             TaxTextBox.Text = "$" + Math.Round(tax, 2).ToString();
             AfterTaxTextBox.Text = "$" + Math.Round(afterTax, 2).ToString();
+            currentAmountPay = Math.Round(afterTax, 2);
         }
 
         private void DeleteItemButtonClick(object o, EventArgs e)
@@ -556,6 +572,44 @@ namespace FPCoderCafe.UserControls
 
         private void SavingPointClick(object o, EventArgs e)
         {
+            if (checkPointClick)
+            {
+                checkPointClick = !checkPointClick;
+
+                PointButton.Background = Brushes.LightGray;
+
+                using (var ctx = new PointOfSaleContext())
+                {
+                    var getUserByPhone = ctx.Customers.Where(x => x.Phone.Equals(UserPhoneNum.Content.ToString())).First();
+
+                    UserPhoneNum.Content = getUserByPhone.Phone;
+                    UserPoint.Content = getUserByPhone.RedeemPoint;
+                }
+
+                double beforeTax = tempItems.Select(x => x.TotalPrice).Sum();
+                double tax = beforeTax * 5 / 100;
+                double afterTax = beforeTax + tax;
+
+                currentAmountPay = Math.Round(afterTax, 2);
+
+                PointGrid.Visibility = Visibility.Collapsed;
+            } else
+            {
+                checkPointClick = true;
+
+                PointButton.Background = Brushes.LightBlue;
+
+                DoCalculatePoint();
+            }
+        }
+
+        private void CancelButtonClick(object o, EventArgs e)
+        {
+            ResetPayment();
+        }
+
+        private void DoCalculatePoint()
+        {
             Customer getCustomer;
 
             using (var ctx = new PointOfSaleContext())
@@ -564,13 +618,70 @@ namespace FPCoderCafe.UserControls
             }
 
             double currentUserPoint = double.Parse(getCustomer.RedeemPoint);
-            double currentTotalPay = Double.Parse(TotalPrice.Text);
             double currentSavingAmount = currentUserPoint / 10.0;
-            
+            double afterUsePoint = currentAmountPay - currentSavingAmount;
 
+            if (afterUsePoint < 0)
+            {
+                UserPoint.Content = Math.Abs((int)afterUsePoint * 10).ToString();
+                RemainAmount.Text = "$0";
+                currentAmountPay = 0;
+            }
+            else
+            {
+                RemainAmount.Text = "$" + Math.Round(afterUsePoint, 2).ToString();
+                currentAmountPay = Math.Round(afterUsePoint, 2);
+            }
 
             PointGrid.Visibility = Visibility.Visible;
+        }
 
+        private void ResetPayment()
+        {
+            currentAmountPay = 0;
+            ItemDataGrid.Items.Clear();
+            LoadSignInButton.Visibility = Visibility.Visible;
+            PhoneLabel.Visibility = Visibility.Collapsed;
+            PointLabel.Visibility = Visibility.Collapsed;
+            UserPhoneNum.Content = "";
+            UserPoint.Content = "";
+            CashButton.Background = Brushes.LightGray;
+            DebitButton.Background = Brushes.LightGray;
+            CreditButton.Background = Brushes.LightGray;
+            PointButton.Background = Brushes.LightGray;
+            BeforeTaxTextBox.Text = "";
+            TaxTextBox.Text = "";
+            AfterTaxTextBox.Text = "";
+            RemainAmount.Text = "";
+            PaymentGrid.Visibility = Visibility.Collapsed;
+            CategoryListBox.Visibility = Visibility.Visible;
+            PointGrid.Visibility = Visibility.Collapsed;
+            MakePayButton.IsEnabled = true;
+
+        }
+
+        private void PayClick()
+        {
+            string paymentType = "";
+            if (PointButton.Background == Brushes.LightBlue)
+            {
+                paymentType = "Point";
+            }
+
+            if (CashButton.Background == Brushes.LightBlue)
+            {
+                paymentType = "Cash";
+            }
+            else if (DebitButton.Background == Brushes.LightBlue)
+            {
+                paymentType = "Debit";
+                ResetPayment();
+            }
+            else if (CreditButton.Background == Brushes.LightBlue)
+            {
+                paymentType = "Credit";
+                ResetPayment();
+            }
         }
 
         public class TempItem
