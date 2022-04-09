@@ -17,6 +17,8 @@ namespace FPCoderCafe.Entities
         public string Note { get; set; }
         [Required]
         public int ProductId { get; set; }
+        [Required]
+        public int OrderId { get; set; }
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
         public decimal TaxAmount { get; set; }

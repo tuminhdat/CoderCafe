@@ -17,10 +17,12 @@ namespace FPCoderCafe.Entities
         public List<Item> Items { get; set; } = new List<Item>();
         public int? CustomerId { get; set; }
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public Customer Customer { get; set; } = new Customer();
         public List<Payment> Payments { get; set; }
         [NotMapped]
         public decimal TotalAmt { get => Items.Sum(x=>x.Sales); }
+        [NotMapped]
+        public string CusPhone { get => Customer.Phone; }
         public Order()
         {
 
