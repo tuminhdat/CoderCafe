@@ -89,7 +89,7 @@ namespace FPCoderCafe.UserControls
 
         public void SwitchModeEventHandler(object o, EventArgs args)
         {
-            MainWindow.GetMainWindow().SwitchToFoodMenu();
+            (Application.Current.MainWindow as MainWindow).SwitchToFoodMenu();
         }
 
         private void InititializeUserInfoDataGrid()

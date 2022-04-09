@@ -21,32 +21,19 @@ namespace FPCoderCafe
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Singleton pattern to get MainWindow ob
-        private static MainWindow mainWindow;
-
-        private FoodMenuUserControl foodMenuUserControl = new FoodMenuUserControl();
-        private ManagerUserControl managerUserControl = new ManagerUserControl();
-
-        public event EventHandler CanExecuteChanged;
-
-        public static MainWindow GetMainWindow()
-        {
-            return mainWindow;
-        }
-
+        private readonly FoodMenuUserControl foodMenuUserControl = new FoodMenuUserControl();
+        private readonly ManagerUserControl managerUserControl = new ManagerUserControl();
 
         public MainWindow()
         {
             InitializeComponent();
-            mainWindow = this;
             if (string.IsNullOrEmpty(Properties.Settings.Default.ManagerPinCode))
             {
-                MainFrame.Content = new ManagerUserControl();
-
+                MainFrame.Content = managerUserControl;
             }
             else
             {
-                MainFrame.Content = new ManagerUserControl();
+                MainFrame.Content = foodMenuUserControl;
             }
         }
 
