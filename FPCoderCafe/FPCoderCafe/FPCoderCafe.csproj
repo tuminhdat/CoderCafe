@@ -194,6 +194,10 @@
     <Compile Include="Migrations\20220407044912_AddForeignkeyStrings.designer.cs">
       <DependentUpon>20220407044912_AddForeignkeyStrings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20220409042716_AddCustomerAndOrderForeignKeyStrings.cs" />
+    <Compile Include="Migrations\20220409042716_AddCustomerAndOrderForeignKeyStrings.designer.cs">
+      <DependentUpon>20220409042716_AddCustomerAndOrderForeignKeyStrings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\PointOfSaleContextModelSnapshot.cs" />
     <Compile Include="PinCodeWindow.xaml.cs">
       <DependentUpon>PinCodeWindow.xaml</DependentUpon>
