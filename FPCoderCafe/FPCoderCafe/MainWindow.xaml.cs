@@ -44,7 +44,13 @@ namespace FPCoderCafe
                 "To switch back to manager mode:\n press [ESC] and enter the manager pincode ",
                 "Do you want to switch to user mode?",
                 buttons);
-            if(result == MessageBoxResult.Yes) MainFrame.Content = foodMenuUserControl;
+
+            //Set content to Food menu and reload menu data
+            if (result == MessageBoxResult.Yes)
+            {
+                MainFrame.Content = foodMenuUserControl;
+                foodMenuUserControl.InitializeCategoryListBox();
+            }
         }
 
         public void EscCommandEventHandler(object sender, ExecutedRoutedEventArgs e)
