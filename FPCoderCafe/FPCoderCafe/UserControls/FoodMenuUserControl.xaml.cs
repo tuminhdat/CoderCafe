@@ -428,6 +428,8 @@ namespace FPCoderCafe.UserControls
             TaxTextBox.Text = "$" + Math.Round(tax, 2).ToString();
             AfterTaxTextBox.Text = "$" + Math.Round(afterTax, 2).ToString();
             currentAmountPay = Math.Round(afterTax, 2);
+            PointButton.Background = Brushes.LightGray;
+            PointGrid.Visibility = Visibility.Collapsed;
         }
 
         // this function is for when user want to delete an item inside the list
@@ -819,6 +821,26 @@ namespace FPCoderCafe.UserControls
                     nPayment.Amount = (Decimal)currentAmountPay;
                     nPayment.CreateTime = DateTime.Now;
                     payments.Add(nPayment);
+                }
+
+                if (PointButton.Background == Brushes.LightGray)
+                {
+                    using (var ctx = new PointOfSaleContext())
+                    {
+                        Customer getCustomer = (Customer)ctx.Customers.Where(x => x.Phone.Equals(UserPhoneNum.Content.ToString())).First();
+                        getCustomer.RedeemPoint = (Decimal.Parse(UserPoint.Content.ToString()) + (Decimal)Math.Round(currentAmountPay, 0)).ToString();
+                        ctx.Customers.Update(getCustomer);
+                        ctx.SaveChanges();
+                    }
+                } else if (PointButton.Background == Brushes.LightBlue)
+                {
+                    using (var ctx = new PointOfSaleContext())
+                    {
+                        Customer getCustomer = (Customer)ctx.Customers.Where(x => x.Phone.Equals(UserPhoneNum.Content.ToString())).First();
+                        getCustomer.RedeemPoint = ((Decimal)Math.Round(currentAmountPay, 0)).ToString();
+                        ctx.Customers.Update(getCustomer);
+                        ctx.SaveChanges();
+                    }
                 }
             }
             // update, create db
