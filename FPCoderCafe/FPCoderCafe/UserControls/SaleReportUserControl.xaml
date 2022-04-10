@@ -11,9 +11,9 @@
             <RowDefinition Height="11*"/>
             <RowDefinition Height="19*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="OrderDatagrid" HorizontalAlignment="Left" Height="119" Margin="10,119,0,0" VerticalAlignment="Top" Width="312" Grid.Row="1"/>
+        <DataGrid x:Name="OrderDatagrid" HorizontalAlignment="Left" Height="119" Margin="10,119,0,0" VerticalAlignment="Top" Width="312" Grid.Row="1" IsReadOnly="True"/>
 
-        <DataGrid x:Name="ItemDataGrid" HorizontalAlignment="Left" Height="119" Margin="414,119,0,0" VerticalAlignment="Top" Width="357" Grid.Row="1"/>
+        <DataGrid x:Name="ItemDataGrid" HorizontalAlignment="Left" Height="119" Margin="414,119,0,0" VerticalAlignment="Top" Width="357" Grid.Row="1" IsReadOnly="True"/>
         <TextBox x:Name="TotalOrderText" HorizontalAlignment="Left" Height="23" Margin="99,246,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" IsReadOnly="True" RenderTransformOrigin="-1.308,0.652" Grid.Row="1"/>
         <Label Content="Total Orders" HorizontalAlignment="Left" Margin="10,243,0,0" VerticalAlignment="Top" Grid.Row="1"/>
         <Label Content="Total Profits" HorizontalAlignment="Left" Margin="194,246,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.917,4.654" Grid.Row="1"/>
