@@ -72,7 +72,7 @@ namespace FPCoderCafe.UserControls
             using (var ctx = new PointOfSaleContext())
             {
                 customerList = ctx.Customers.ToList();
-                orderList = ctx.Orders.Include(x => x.Customer).ToList();
+                orderList = ctx.Orders.Include(x => x.Customer).Include(x => x.Items).ToList();
                 var orderToDisplay = from order in orderList
                                      from customer in customerList
                                      where order.CustomerId == customer.Id &&
@@ -149,7 +149,7 @@ namespace FPCoderCafe.UserControls
 
             DataGridTextColumn CustomerPhoneColumn = new DataGridTextColumn();
             CustomerPhoneColumn.Header = "Customer Phone";
-            CustomerPhoneColumn.Binding = new Binding("Order.CusPhone");
+            CustomerPhoneColumn.Binding = new Binding("Customer.Phone");
 
             OrderDatagrid.Columns.Add(IdColumn);
             OrderDatagrid.Columns.Add(OrderNumberColumn);
@@ -160,7 +160,7 @@ namespace FPCoderCafe.UserControls
         {
             using (var ctx = new PointOfSaleContext())
             {
-                orderList = ctx.Orders.Include(x => x.Customer).ToList();
+                orderList = ctx.Orders.Include(x => x.Customer).Include(x => x.Items).ToList();
                 foreach(Order order in orderList)
                 {
                     OrderDatagrid.Items.Add(order);
@@ -219,8 +219,8 @@ namespace FPCoderCafe.UserControls
             if (selectedOrder == null) return;
             using (var ctx = new PointOfSaleContext())
             {
-                itemList = ctx.Items.Where(x => x.OrderId == selectedOrder.Id).ToList();
-                ItemDataGrid.ItemsSource = itemList.ToList();
+                itemList = ctx.Items.Where(x => x.OrderId == selectedOrder.Id).Include(x => x.Product).ToList();
+                itemList.ForEach(x => ItemDataGrid.Items.Add(x));
             }
         }
 
