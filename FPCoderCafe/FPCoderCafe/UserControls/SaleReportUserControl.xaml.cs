@@ -1,5 +1,6 @@
 ﻿using FPCoderCafe.Entities;
 using FPCoderCafe.Utilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -71,7 +72,7 @@ namespace FPCoderCafe.UserControls
             using (var ctx = new PointOfSaleContext())
             {
                 customerList = ctx.Customers.ToList();
-                orderList = ctx.Orders.ToList();
+                orderList = ctx.Orders.Include(x => x.Customer).ToList();
                 var orderToDisplay = from order in orderList
                                      from customer in customerList
                                      where order.CustomerId == customer.Id &&
@@ -159,7 +160,7 @@ namespace FPCoderCafe.UserControls
         {
             using (var ctx = new PointOfSaleContext())
             {
-                orderList = ctx.Orders.ToList();
+                orderList = ctx.Orders.Include(x => x.Customer).ToList();
                 foreach(Order order in orderList)
                 {
                     OrderDatagrid.Items.Add(order);
@@ -215,6 +216,7 @@ namespace FPCoderCafe.UserControls
         private void DisplayItem(object o, EventArgs e)
         {
             Order selectedOrder = (Order)OrderDatagrid.SelectedItem;
+            if (selectedOrder == null) return;
             using (var ctx = new PointOfSaleContext())
             {
                 itemList = ctx.Items.Where(x => x.OrderId == selectedOrder.Id).ToList();
