@@ -825,12 +825,15 @@ namespace FPCoderCafe.UserControls
 
                 if (PointButton.Background == Brushes.LightGray)
                 {
-                    using (var ctx = new PointOfSaleContext())
+                    if (!UserPhoneNum.Content.Equals(""))
                     {
-                        Customer getCustomer = (Customer)ctx.Customers.Where(x => x.Phone.Equals(UserPhoneNum.Content.ToString())).First();
-                        getCustomer.RedeemPoint = (Decimal.Parse(UserPoint.Content.ToString()) + (Decimal)Math.Round(currentAmountPay, 0)).ToString();
-                        ctx.Customers.Update(getCustomer);
-                        ctx.SaveChanges();
+                        using (var ctx = new PointOfSaleContext())
+                        {
+                            Customer getCustomer = (Customer)ctx.Customers.Where(x => x.Phone.Equals(UserPhoneNum.Content.ToString())).First();
+                            getCustomer.RedeemPoint = (Decimal.Parse(UserPoint.Content.ToString()) + (Decimal)Math.Round(currentAmountPay, 0)).ToString();
+                            ctx.Customers.Update(getCustomer);
+                            ctx.SaveChanges();
+                        }
                     }
                 } else if (PointButton.Background == Brushes.LightBlue)
                 {
