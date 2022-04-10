@@ -833,6 +833,7 @@ namespace FPCoderCafe.UserControls
                             getCustomer.RedeemPoint = (Decimal.Parse(UserPoint.Content.ToString()) + (Decimal)Math.Round(currentAmountPay, 0)).ToString();
                             ctx.Customers.Update(getCustomer);
                             ctx.SaveChanges();
+                            nOrder.CustomerId = getCustomer.Id;
                         }
                     }
                 } else if (PointButton.Background == Brushes.LightBlue)
