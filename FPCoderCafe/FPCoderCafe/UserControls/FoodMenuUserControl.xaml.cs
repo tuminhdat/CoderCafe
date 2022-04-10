@@ -205,7 +205,7 @@ namespace FPCoderCafe.UserControls
         }
 
         // this function is for load the data from db into category list box
-        private void InitializeCategoryListBox()
+        public void InitializeCategoryListBox()
         {
             using (var ctx = new PointOfSaleContext())
             {
@@ -264,7 +264,15 @@ namespace FPCoderCafe.UserControls
                     // load value into field
                     PlaceProductId.Text = getProductItem.Id.ToString();
                     ProductNameText.Content = getProductItem.Name;
-                    ItemImage.Source = new BitmapImage(new Uri(getProductItem.FullImagePath));
+                    try
+                    {
+                        ItemImage.Source = new BitmapImage(new Uri(getProductItem.FullImagePath));
+                    }
+                    catch (Exception)
+                    {
+
+                        ItemImage.Source = null;
+                    }
                 }
             }
             // make product list box invisible

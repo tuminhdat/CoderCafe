@@ -240,7 +240,14 @@ namespace FPCoderCafe.UserControls
                 //Set image path to file name
                 ImagePathTextBox.Text = System.IO.Path.GetFileName(fileName);
                 //Show the image from file
-                FoodImage.Source = new BitmapImage(new Uri(fileName));
+                try
+                {
+                    FoodImage.Source = new BitmapImage(new Uri(fileName));
+                }
+                catch (Exception)
+                {
+                    FoodImage.Source = null;
+                }
                 //Copy image into the designated folder for images
                 var destination = Directory.GetCurrentDirectory() + @"\Images\" + System.IO.Path.GetFileName(fileName);
                 if (!File.Exists(destination))

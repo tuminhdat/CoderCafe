@@ -78,7 +78,14 @@ namespace FPCoderCafe.UserControls
                 //Set the name of chosen image file
                 ImagePathTextBox.Text = System.IO.Path.GetFileName(fileName);
                 //Display selected image
-                CategoryImage.Source = new BitmapImage(new Uri(fileName));
+                try
+                {
+                    CategoryImage.Source = new BitmapImage(new Uri(fileName));
+                }
+                catch (Exception)
+                {
+                    CategoryImage.Source = null;
+                }
                 //Get the desired destination path to save image there
                 string destination = Directory.GetCurrentDirectory() + @"\Images\" + System.IO.Path.GetFileName(fileName);
                
