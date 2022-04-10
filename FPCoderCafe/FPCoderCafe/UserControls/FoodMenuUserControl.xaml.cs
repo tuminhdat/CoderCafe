@@ -871,6 +871,8 @@ namespace FPCoderCafe.UserControls
                 // add Order into db
                 ctx.Orders.Add(nOrder);
                 ctx.SaveChanges();
+
+                MessageBox.Show("Payment completed. Your order number is " + currentOrderNumber.LastOrDefault() + 1);
             }
             // reset everything
             ResetPayment();
