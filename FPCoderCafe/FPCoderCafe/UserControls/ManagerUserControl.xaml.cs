@@ -49,6 +49,10 @@ namespace FPCoderCafe.UserControls
                 FoodControl.ClearInput();
                 FoodControl.UpdateDataGrid();
             }
+            if (tab.Content == SalesReportControl)
+            {
+                SalesReportControl.PopulateOrderDatagrid();
+            }
         }
     }
 }

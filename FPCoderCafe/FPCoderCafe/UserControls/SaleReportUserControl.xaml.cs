@@ -156,7 +156,7 @@ namespace FPCoderCafe.UserControls
             OrderDatagrid.Columns.Add(TotalAmountColumn);
             OrderDatagrid.Columns.Add(CustomerPhoneColumn);
         }
-        private void PopulateOrderDatagrid()
+        public void PopulateOrderDatagrid()
         {
             using (var ctx = new PointOfSaleContext())
             {

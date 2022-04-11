@@ -14,7 +14,7 @@
             <local:CategoryUserControl/>
         </TabItem>
         <TabItem Header="Sale Report" Width="180">
-            <local:SaleReportUserControl/>
+            <local:SaleReportUserControl x:Name="SalesReportControl"/>
         </TabItem>
         <TabItem Header="Control Panel" Width="200">
             <local:ControlPanelUserControl/>
