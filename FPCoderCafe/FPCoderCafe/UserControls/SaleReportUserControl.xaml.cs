@@ -29,7 +29,7 @@ namespace FPCoderCafe.UserControls
         List<Category> categoryList = new List<Category>();
         List<Item> itemList = new List<Item>();
         List<Product> productList = new List<Product>();
-
+        List<Payment> paymentList = new List<Payment>();
         public SaleReportUserControl()
         {
             ToggleEventHandler(false);
@@ -47,6 +47,7 @@ namespace FPCoderCafe.UserControls
             {
                 SearchByCategoryText.TextChanged += CheckSearchTextBox;
                 DisplayItemButton.Click += DisplayItem;
+                SearchByDateButton.Click += UpdateSearchTableByDate;
             }
             else
             {
@@ -62,7 +63,7 @@ namespace FPCoderCafe.UserControls
             }      
         }
 
-        private void UpdateSearchTableByDate()
+        private void UpdateSearchTableByDate(object o, EventArgs e)
         {
             var startDate = StartDatePicker.SelectedDate;
             var endDate = EndDatePicker.SelectedDate;
@@ -78,20 +79,19 @@ namespace FPCoderCafe.UserControls
                                      where order.CustomerId == customer.Id &&
                                      (order.CreateTime >= startDate && order.CreateTime <= endDate)
                                      select order;
-                var customerName = from order in orderToDisplay select order.CusPhone;
+                var customerPhone = from order in orderToDisplay select order.CusPhone;
+                var amountPaid = from order in orderToDisplay select order.TotalAmt;
                 var orderDate = from order in orderToDisplay select order.CreateTime;
-                itemList = (List<Item>)(from order in orderToDisplay select order.Items.ToList());
-                sb.Append("Customer phone: " + customerName);
-                sb.Append("Order:");
+                //paymentList = (List<Payment>)(from order in orderToDisplay select order.Payments.ToList());
+                //var paymentType = from t in paymentList select t.Type;
 
                 for(int i = 0; i < orderToDisplay.Count(); i++)
                 {
-                    foreach (Item item in itemList)
-                    {
-                        sb.Append("\t" + i + ". Order Date: " + orderDate + " || Item: " + item);
-
-                    }
+                     sb.Append("\n" + i + ". Order Date: " + orderDate.First() + " || Customer Phone: " + customerPhone.First() + " || Amount Paid: " + amountPaid.First());
+                    //sb.Append("Payment Type: " + paymentType.ToList());
+                         //Date,CustomerPhone, AmountPaid, PaymentType,
                 }
+                SearchTextBlock.Text += sb.ToString();
 
             }
         }
@@ -220,6 +220,7 @@ namespace FPCoderCafe.UserControls
             using (var ctx = new PointOfSaleContext())
             {
                 itemList = ctx.Items.Where(x => x.OrderId == selectedOrder.Id).Include(x => x.Product).ToList();
+                ItemDataGrid.Items.Clear();
                 itemList.ForEach(x => ItemDataGrid.Items.Add(x));
             }
         }
