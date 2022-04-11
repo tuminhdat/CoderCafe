@@ -86,8 +86,8 @@ namespace FPCoderCafe.UserControls
                 //var paymentType = from t in paymentList select t.Type;
 
                 for(int i = 0; i < orderToDisplay.Count(); i++)
-                {
-                     sb.Append("\n" + i + ". Order Date: " + orderDate.First() + " || Customer Phone: " + customerPhone.First() + " || Amount Paid: " + amountPaid.First());
+                {//myCars.Select((car, index) => (car, index)).First(myCondition).index;
+                    sb.Append("\n" + i + ". Order Date: " + orderDate.ToList()[i] + " || Customer Phone: " + customerPhone.ToList()[i] + " || Amount Paid: " + amountPaid.ToList()[i]);
                     //sb.Append("Payment Type: " + paymentType.ToList());
                          //Date,CustomerPhone, AmountPaid, PaymentType,
                 }
@@ -172,7 +172,7 @@ namespace FPCoderCafe.UserControls
 
             //get total profit
             var profit = orderList.Select(x => x.TotalAmt).Sum();
-            TotalProfitsText.Text = profit.ToString();
+            TotalProfitsText.Text = profit.ToString("$#,##0.00");
         }
 
         private void InitializeItemDataGrid()
