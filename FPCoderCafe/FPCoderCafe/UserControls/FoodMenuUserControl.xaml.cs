@@ -585,6 +585,7 @@ namespace FPCoderCafe.UserControls
                     newCustomer.Phone = phone;
                     newCustomer.BarCode = pin;
                     newCustomer.RedeemPoint = "0";
+                    newCustomer.IsEnable = true;
                     // create new customer in db
                     ctx.Customers.Add(newCustomer);
                     ctx.SaveChanges();
@@ -612,7 +613,7 @@ namespace FPCoderCafe.UserControls
             using (var ctx = new PointOfSaleContext())
             {
                 // check if user nput that matches in db
-                var checkExistPhone = ctx.Customers.Where(x => x.Phone.Equals(phone) && x.BarCode.Equals(pin)).FirstOrDefault();
+                var checkExistPhone = ctx.Customers.Where(x => x.Phone.Equals(phone) && x.BarCode.Equals(pin) && x.IsEnable).FirstOrDefault();
 
                 if (checkExistPhone != null)
                 {
@@ -633,7 +634,7 @@ namespace FPCoderCafe.UserControls
                 }
                 else
                 {
-                    MessageBox.Show("You are either enter wrong phone number or pin");
+                    MessageBox.Show("You are either enter wrong phone number or pin or your account has problem");
                     return;
                 }
             }
