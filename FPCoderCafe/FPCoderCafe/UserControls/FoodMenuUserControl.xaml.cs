@@ -719,6 +719,7 @@ namespace FPCoderCafe.UserControls
         // reset all fields in every form
         private void ResetPayment()
         {
+            tempItems = new List<TempItem>();
             currentAmountPay = 0;
             ItemDataGrid.Items.Clear();
             LoadSignInButton.Visibility = Visibility.Visible;
@@ -881,7 +882,7 @@ namespace FPCoderCafe.UserControls
                 ctx.Orders.Add(nOrder);
                 ctx.SaveChanges();
 
-                MessageBox.Show("Payment completed. Your order number is " + currentOrderNumber.LastOrDefault() + 1);
+                MessageBox.Show("Payment completed. Your order number is " + nOrder.OrderNumber);
             }
             // reset everything
             ResetPayment();
